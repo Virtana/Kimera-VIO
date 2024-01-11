@@ -1,10 +1,11 @@
 # Use an official Python runtime as a parent image
 FROM ubuntu:18.04
 
-MAINTAINER Antoni Rosinol "arosinol@mit.edu"
+LABEL maintainer="Antoni Rosinol arosinol@mit.edu"
 
 # To avoid tzdata asking for geographic location...
-ENV DEBIAN_frontend noninteractive
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
 
 # Set the working directory to /root
 ENV DIRPATH /root
@@ -14,15 +15,27 @@ WORKDIR $DIRPATH
 RUN apt-get update && apt-get install -y --no-install-recommends apt-utils
 RUN apt-get update && apt-get install -y git cmake
 
+RUN apt-get install -y tzdata
+
 # Install xvfb to provide a display to container for GUI related testing.
 RUN apt-get update && apt-get install -y xvfb
 
 # Install GTSAM
+# RUN apt-get update && apt-get install -y libboost-all-dev
+# ADD https://api.github.com/repos/borglab/gtsam/git/refs/heads/master version.json
+# RUN git clone https://github.com/borglab/gtsam.git
+# RUN cd gtsam && \
+#     git fetch && \
+#     mkdir build && \
+#     cd build && \
+#     cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DGTSAM_BUILD_TESTS=OFF -DGTSAM_BUILD_EXAMPLES_ALWAYS=OFF -DCMAKE_BUILD_TYPE=Release -DGTSAM_BUILD_UNSTABLE=ON -DGTSAM_TANGENT_PREINTEGRATION=OFF .. && \
+#     make -j$(nproc) install
 RUN apt-get update && apt-get install -y libboost-all-dev
 ADD https://api.github.com/repos/borglab/gtsam/git/refs/heads/master version.json
 RUN git clone https://github.com/borglab/gtsam.git
 RUN cd gtsam && \
     git fetch && \
+    git checkout 4.1.1 && \
     mkdir build && \
     cd build && \
     cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DGTSAM_BUILD_TESTS=OFF -DGTSAM_BUILD_EXAMPLES_ALWAYS=OFF -DCMAKE_BUILD_TYPE=Release -DGTSAM_BUILD_UNSTABLE=ON -DGTSAM_TANGENT_PREINTEGRATION=OFF .. && \
@@ -87,24 +100,25 @@ RUN apt-get update && \
     apt-get install software-properties-common -y
 # Get python3
 RUN apt-get update && \
-    add-apt-repository ppa:deadsnakes/ppa
+    add-apt-repository 'ppa:deadsnakes/ppa'
 RUN apt-get update && \
-    apt-get install -y python3.5 python3.5-dev python-pip python3-pip python-tk python3-tk
-RUN python3.5 -m pip install PyQt5==5.14
+    apt-get install -y python3.6 python3.6-dev python-pip python3-pip python-tk python3-tk
+RUN python3.6 -m pip install PyQt5==5.14
 
 # Install evo-1 for evaluation
 # Hack to avoid Docker's cache when evo-1 master branch is updated.
 ADD https://api.github.com/repos/ToniRV/evo-1/git/refs/heads/master version.json
 RUN git clone https://github.com/ToniRV/evo-1.git
-RUN cd evo-1 && python3.5 $(which pip3) install .
+RUN cd evo-1 && python3.6 $(which pip3) install .
 
 # Install spark_vio_evaluation
-RUN python3.5 $(which pip3) install ipython prompt_toolkit
+RUN apt-get update && apt-get install -y libffi-dev
+RUN python3.6 $(which pip3) install ipython prompt_toolkit "setuptools_scm<7"
 # Hack to avoid Docker's cache when spark_vio_evaluation master branch is updated.
 ADD https://api.github.com/repos/ToniRV/Kimera-VIO-Evaluation/git/refs/heads/master version.json
 RUN git clone https://github.com/ToniRV/Kimera-VIO-Evaluation.git
 # We use `pip3 install -e .` so that Jinja2 has access to the webiste template...
-RUN cd Kimera-VIO-Evaluation && python3.5 $(which pip3) install -e .
+RUN cd Kimera-VIO-Evaluation && python3.6 $(which pip3) install -e .
 
 # Add credentials on build
 ARG SSH_PRIVATE_KEY
@@ -121,7 +135,7 @@ RUN apt-get update && apt-get install -y libgflags2.2 libgflags-dev libgoogle-gl
 
 # Install Kimera-VIO
 RUN git clone https://github.com/MIT-SPARK/Kimera-VIO.git
-RUN cd Kimera-VIO && mkdir build && cd build && cmake .. && make -j$(nproc)
+RUN cd Kimera-VIO && mkdir build && cd build && cmake .. && make -j$(nproc) 
 
 # Download and extract EuRoC dataset.
 RUN apt-get update && apt-get install -y wget
