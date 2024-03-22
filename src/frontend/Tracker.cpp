@@ -25,7 +25,6 @@
 #include "kimera-vio/frontend/optical-flow/OpticalFlowPredictorFactory.h"
 #include "kimera-vio/utils/Timer.h"
 #include "kimera-vio/utils/UtilsOpenCV.h"
-#include "kimera-vio/visualizer/Display-definitions.h"
 
 DEFINE_bool(visualize_feature_predictions,
             false,
@@ -176,13 +175,6 @@ void Tracker::featureTracking(Frame* ref_frame,
            << *std::max_element(cur_frame->landmarks_age_.begin(),
                                 cur_frame->landmarks_age_.end())
            << " vs. maxFeatureAge_: " << tracker_params_.maxFeatureAge_ << ")";
-  // Display feature tracks together with predicted points.
-  if (display_queue_ && FLAGS_visualize_feature_predictions) {
-    displayImage(cur_frame->timestamp_,
-                 "feature_tracks_with_predicted_keypoints",
-                 getTrackerImage(*ref_frame, *cur_frame, px_predicted, px_ref),
-                 display_queue_);
-  }
 
   // Fill debug information
   debug_info_.nrTrackerFeatures_ = cur_frame->keypoints_.size();
