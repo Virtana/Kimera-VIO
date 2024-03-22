@@ -20,7 +20,6 @@
 
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/mat.hpp>
-#include <opencv2/viz/types.hpp>  // Just for color type.
 
 #include <glog/logging.h>
 
@@ -80,11 +79,11 @@ class Mesh {
         : lmk_id_(-1),
           vertex_position_(),
           vertex_normal_(),
-          vertex_color_(cv::viz::Color::white()) {}
+          vertex_color_(cv::Vec3b(255, 255, 255)) {}
 
     Vertex(const LandmarkId& lmk_id,
            const VertexPosition& vertex_position,
-           const VertexColorRGB& vertex_color = cv::viz::Color::white(),
+           const VertexColorRGB& vertex_color = cv::Vec3b(255, 255, 255),
            const VertexNormal& vertex_normal = VertexNormal())
         : lmk_id_(lmk_id),
           vertex_position_(vertex_position),
@@ -127,7 +126,8 @@ class Mesh {
     VertexPosition vertex_position_;
     VertexNormal vertex_normal_;
     VertexColorRGB vertex_color_;
-  };
+  }; // end Vertex struct
+
   // We define a polygon of the mesh as a set of mesh vertices.
   typedef Vertex<VertexPosition> VertexType;
   // TODO(Toni): a polygon could also contain a normal...
