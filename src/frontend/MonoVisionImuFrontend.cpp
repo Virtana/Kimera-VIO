@@ -296,13 +296,6 @@ StatusMonoMeasurementsPtr MonoVisionImuFrontend::processFrame(
     //   if (FLAGS_log_feature_tracks) sendFeatureTracksToLogger();
     //   if (FLAGS_log_mono_matching_images) sendMonoTrackingToLogger();
     // }
-    if (display_queue_ && FLAGS_visualize_feature_tracks) {
-      displayImage(mono_frame_k_->timestamp_,
-                   "feature_tracks",
-                   tracker_->getTrackerImage(*mono_frame_lkf_,
-                                             *mono_frame_k_),
-                   display_queue_);
-    }
 
     mono_frame_lkf_ = mono_frame_k_;
 

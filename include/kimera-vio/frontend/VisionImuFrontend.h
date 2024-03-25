@@ -28,8 +28,6 @@
 #include "kimera-vio/imu-frontend/ImuFrontendParams.h"
 #include "kimera-vio/logging/Logger.h"
 #include "kimera-vio/pipeline/PipelineModule.h"
-#include "kimera-vio/visualizer/Display-definitions.h"
-#include "kimera-vio/visualizer/Visualizer3D-definitions.h"
 
 DECLARE_bool(visualize_feature_tracks);
 DECLARE_bool(visualize_frontend_images);

@@ -14,7 +14,7 @@
 
 #include "kimera-vio/frontend/VisionImuFrontend.h"
 
-DEFINE_bool(visualize_feature_tracks, true, "Display feature tracks.");
+DEFINE_bool(visualize_feature_tracks, false, "Display feature tracks.");
 DEFINE_bool(visualize_frontend_images,
             false,
             "Display images in Frontend logger for debugging (only use "

@@ -409,13 +409,6 @@ StatusStereoMeasurementsPtr StereoVisionImuFrontend::processStereoFrame(
       if (FLAGS_log_mono_tracking_images) sendStereoMatchesToLogger();
       if (FLAGS_log_stereo_matching_images) sendMonoTrackingToLogger();
     }
-    if (display_queue_ && FLAGS_visualize_feature_tracks) {
-      displayImage(stereoFrame_k_->timestamp_,
-                   "feature_tracks",
-                   tracker_->getTrackerImage(stereoFrame_lkf_->left_frame_,
-                                            stereoFrame_k_->left_frame_),
-                   display_queue_);
-    }
 
     // Populate statistics.
     stereoFrame_k_->checkStatusRightKeypoints(&tracker_->debug_info_);
