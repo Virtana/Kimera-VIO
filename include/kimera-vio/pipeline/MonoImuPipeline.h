@@ -27,9 +27,7 @@ class MonoImuPipeline : public Pipeline {
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
  public:
-  MonoImuPipeline(const VioParams& params,
-               Visualizer3D::UniquePtr&& visualizer = nullptr,
-               DisplayBase::UniquePtr&& displayer = nullptr);
+  MonoImuPipeline(const VioParams& params);
 
   ~MonoImuPipeline() = default;
 
