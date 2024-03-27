@@ -33,9 +33,7 @@ class StereoImuPipeline : public Pipeline {
      * @param visualizer Optional visualizer for visualizing 3D results
      * @param displayer Optional displayer for visualizing 2D results
      */
-  StereoImuPipeline(const VioParams& params,
-                 Visualizer3D::UniquePtr&& visualizer = nullptr,
-                 DisplayBase::UniquePtr&& displayer = nullptr);
+  StereoImuPipeline(const VioParams& params);
 
   ~StereoImuPipeline() = default;
 
