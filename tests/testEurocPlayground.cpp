@@ -142,7 +142,7 @@ TEST(TestEurocPlayground, DISABLED_basicEurocPlayground) {
       output->widgets_.rbegin()->second->setPose(
           UtilsOpenCV::gtsamPose3ToCvAffine3d(world_pose_body));
     }
-    euroc_playground.display_module_->spinOnce(std::move(output));
+    // euroc_playground.display_module_->spinOnce(std::move(output));
     /// Render all the mesh reconstruction
     // mesh_opt.spinDisplay();
   }

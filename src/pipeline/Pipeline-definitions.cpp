@@ -57,7 +57,7 @@ VioParams::VioParams(const std::string& params_folder_path,
       frontend_params_(),
       backend_params_(std::make_shared<BackendParams>()),
       lcd_params_(),
-      display_params_(std::make_shared<DisplayParams>(DisplayType::kOpenCV)),
+      // display_params_(std::make_shared<DisplayParams>(DisplayType::kOpenCV)),
       frontend_type_(FrontendType::kStereoImu),
       backend_type_(BackendType::kStructuralRegularities),
       parallel_run_(true),
@@ -88,9 +88,9 @@ bool VioParams::parseYAML(const std::string& folder_path) {
   int frontend_type;
   yaml_parser.getYamlParam("frontend_type", &frontend_type);
   frontend_type_ = static_cast<FrontendType>(frontend_type);
-  int display_type;
-  yaml_parser.getYamlParam("display_type", &display_type);
-  display_type_ = 0;
+  // int display_type;
+  // yaml_parser.getYamlParam("display_type", &display_type);
+  // display_type_ = 0;
   yaml_parser.getYamlParam("parallel_run", &parallel_run_);
 
   // Parse IMU params

@@ -17,8 +17,8 @@ EurocPlayground::EurocPlayground(const std::string& dataset_path,
       feature_detector_(nullptr),
       euroc_data_provider_(nullptr),
       visualizer_3d_(nullptr),
-      display_module_(nullptr),
-      display_input_queue_("display_input_queue"),
+    //   display_module_(nullptr),
+    //   display_input_queue_("display_input_queue"),
       imu_data_(),
       left_frame_queue_("left_frame_queue"),
       right_frame_queue_("right_frame_queue"),
@@ -50,18 +50,18 @@ EurocPlayground::EurocPlayground(const std::string& dataset_path,
   visualizer_3d_ = VIO::make_unique<OpenCvVisualizer3D>(viz_type, backend_type);
 
   // Create Displayer
-  CHECK(vio_params_.display_params_);
-  OpenCv3dDisplayParams modified_display_params =
-      VIO::safeCast<DisplayParams, OpenCv3dDisplayParams>(
-          *vio_params_.display_params_);
-  modified_display_params.hold_3d_display_ = true;
-  DisplayParams::Ptr new_display_params =
-      std::make_shared<OpenCv3dDisplayParams>(modified_display_params);
-  display_module_ = VIO::make_unique<DisplayModule>(
-      &display_input_queue_,
-      nullptr,
-      vio_params_.parallel_run_,
-      VIO::make_unique<OpenCv3dDisplay>(new_display_params, nullptr));
+//   CHECK(vio_params_.display_params_);
+//   OpenCv3dDisplayParams modified_display_params =
+//       VIO::safeCast<DisplayParams, OpenCv3dDisplayParams>(
+//           *vio_params_.display_params_);
+//   modified_display_params.hold_3d_display_ = true;
+//   DisplayParams::Ptr new_display_params =
+//       std::make_shared<OpenCv3dDisplayParams>(modified_display_params);
+//   display_module_ = VIO::make_unique<DisplayModule>(
+//       &display_input_queue_,
+//       nullptr,
+//       vio_params_.parallel_run_,
+//       VIO::make_unique<OpenCv3dDisplay>(new_display_params, nullptr));
 
   // Create Feature detector
   FeatureDetectorParams feature_detector_params;
@@ -239,7 +239,7 @@ void EurocPlayground::visualizeGtData(const bool& viz_traj,
     visualizer_3d_->visualizePlyMesh(pcl_ply_filename, &output->widgets_);
   }
 
-  display_module_->spinOnce(std::move(output));
+//   display_module_->spinOnce(std::move(output));
 }
 
 void EurocPlayground::projectVisibleLandmarksToCam(

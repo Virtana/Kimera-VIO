@@ -93,8 +93,8 @@ public:
   StereoCamera::ConstPtr stereo_camera_;
   StereoMatcher::UniquePtr stereo_matcher_;
 
-  DisplayModule::UniquePtr display_module_;
-  DisplayModule::InputQueue display_input_queue_;
+  // DisplayModule::UniquePtr display_module_;
+  // DisplayModule::InputQueue display_input_queue_;
 
 
  protected:
