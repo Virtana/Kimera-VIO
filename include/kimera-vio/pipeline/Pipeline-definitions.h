@@ -122,11 +122,11 @@ struct VioParams : public PipelineParams {
   //!  so that any changes to this pointer will affect both.
   BackendParams::Ptr backend_params_;
   LoopClosureDetectorParams lcd_params_;
-  DisplayParams::Ptr display_params_;
+  // DisplayParams::Ptr display_params_;
   //! General Pipeline parameters
   FrontendType frontend_type_;
   BackendType backend_type_;
-  DisplayType display_type_;
+  // DisplayType display_type_;
   bool parallel_run_;
 
  protected:
@@ -141,9 +141,8 @@ struct VioParams : public PipelineParams {
         backend_params_ == rhs.backend_params_ &&
         frontend_type_ == rhs.frontend_type_ &&
         backend_type_ == rhs.backend_type_ &&
-        display_type_ == rhs.display_type_ &&
         lcd_params_ == rhs.lcd_params_ &&
-        display_params_ == rhs.display_params_ &&
+        // display_params_ == rhs.display_params_ &&
         parallel_run_ == rhs.parallel_run_;
   }
 
