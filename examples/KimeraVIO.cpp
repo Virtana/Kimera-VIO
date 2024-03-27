@@ -136,7 +136,6 @@ int main(int argc, char* argv[]) {
                    vio_pipeline,
                    500,
                    true);
-    vio_pipeline->spinViz();
     is_pipeline_successful = !handle.get();
     handle_shutdown.get();
     handle_pipeline.get();
