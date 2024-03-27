@@ -95,13 +95,6 @@ class Pipeline {
   virtual bool spin();
 
   /**
-   * @brief spinViz Run an endless loop until shutdown to visualize.
-   * @return Returns whether the visualizer_ is running or not. While in
-   * parallel mode, it does not return unless shutdown.
-   */
-  virtual bool spinViz();
-
-  /**
    * @brief printStatus Returns a string with useful information to monitor the
    * status of the pipeline, in particular, whether the pipeline's modules are
    * working and if their queues are filled.
@@ -260,15 +253,6 @@ class Pipeline {
   //! Loop Closure Detector
   LcdModule::UniquePtr lcd_module_;
 
-  //! Visualizer: builds images to be displayed
-  VisualizerModule::UniquePtr visualizer_module_;
-
-  //! Thread-safe queue for the input to the display module
-  DisplayModule::InputQueue display_input_queue_;
-
-  //! Displays actual images and 3D visualization
-  DisplayModule::UniquePtr display_module_;
-
   // Atomic Flags
   std::atomic_bool is_backend_ok_ = {true};
 
@@ -281,7 +265,6 @@ class Pipeline {
   std::unique_ptr<std::thread> backend_thread_ = {nullptr};
   std::unique_ptr<std::thread> mesher_thread_ = {nullptr};
   std::unique_ptr<std::thread> lcd_thread_ = {nullptr};
-  std::unique_ptr<std::thread> visualizer_thread_ = {nullptr};
 };
 
 }  // namespace VIO
