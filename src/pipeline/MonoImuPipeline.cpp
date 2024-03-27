@@ -57,7 +57,7 @@ MonoImuPipeline::MonoImuPipeline(const VioParams& params)
           gtsam::imuBias::ConstantBias(),
           params.frontend_params_,
           camera_,
-          FLAGS_visualize ? &display_input_queue_ : nullptr,
+          nullptr,
           FLAGS_log_output));
 
   auto& backend_input_queue = backend_input_queue_;
