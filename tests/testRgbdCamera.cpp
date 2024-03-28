@@ -66,7 +66,7 @@ class RgbdCameraFixture : public ::testing::Test {
     // CHECK(vio_params_.display_params_);
     // OpenCv3dDisplayParams modified_display_params =
     //     VIO::safeCast<DisplayParams, OpenCv3dDisplayParams>(
-    //         *vio_params_.display_params_);
+    //         *vio_params_.display_params_);s
     // modified_display_params.hold_3d_display_ = true;
     // DisplayParams::Ptr new_display_params =
     //     std::make_shared<OpenCv3dDisplayParams>(modified_display_params);
