@@ -28,12 +28,12 @@
 #include "kimera-vio/frontend/StereoCamera.h"
 #include "kimera-vio/frontend/StereoMatcher.h"
 #include "kimera-vio/frontend/feature-detector/FeatureDetector.h"
-#include "kimera-vio/visualizer/Display.h"
-#include "kimera-vio/visualizer/DisplayFactory.h"
-#include "kimera-vio/visualizer/DisplayModule.h"
-#include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
-#include "kimera-vio/visualizer/Visualizer3D.h"
-#include "kimera-vio/visualizer/Visualizer3DFactory.h"
+// #include "kimera-vio/visualizer/Display.h"
+// #include "kimera-vio/visualizer/DisplayFactory.h"
+// #include "kimera-vio/visualizer/DisplayModule.h"
+// #include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
+// #include "kimera-vio/visualizer/Visualizer3D.h"
+// #include "kimera-vio/visualizer/Visualizer3DFactory.h"
 
 namespace VIO {
 
@@ -87,7 +87,7 @@ public:
   //! Params
   VioParams vio_params_;
 
-  OpenCvVisualizer3D::Ptr visualizer_3d_;
+  // OpenCvVisualizer3D::Ptr visualizer_3d_;
 
   //! Stereo Camera to back/project and do stereo dense reconstruction.
   StereoCamera::ConstPtr stereo_camera_;
