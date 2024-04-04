@@ -46,8 +46,7 @@ TEST(TestEurocPlayground, DISABLED_basicEurocPlayground) {
   // Optimize mesh using MeshOpt
   MeshOptimization mesh_opt(MeshOptimizerType::kGtsamMesh,
                             MeshColorType::kVertexFlatColor,
-                            mono_camera,
-                            euroc_playground.visualizer_3d_);
+                            mono_camera);
 
   // if (FLAGS_display) {
   //   euroc_playground.visualizeGtData(true, true, true);
