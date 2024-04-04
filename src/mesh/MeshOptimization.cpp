@@ -634,8 +634,7 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
               vtx_color = cv::Scalar(
                   0,
                   0,
-                  std::round(std_deviation / kScaleStdDeviation * 255.0),
-                  255);
+                  std::round(std_deviation / kScaleStdDeviation * 255.0));
             } break;
             case MeshColorType::kVertexSupport: {
               // Use the number of datapoints that support this vertex
@@ -643,8 +642,7 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
                   cv::Scalar(std::round(vertex_supports[gtsam::Key(vtx_id)] /
                                         max_vertex_support * 255.0),
                              0,
-                             0,
-                             255);
+                             0);
             } break;
             default: { LOG(FATAL) << "Unrecognized mesh color type."; }
           }
