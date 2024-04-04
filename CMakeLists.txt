@@ -122,9 +122,9 @@ add_subdirectory(src/logging)
 ### Add source code for imu Frontend
 add_subdirectory(include/kimera-vio/imu-frontend)
 add_subdirectory(src/imu-frontend)
-### Add source code for visualizer.
-add_subdirectory(include/kimera-vio/visualizer)
-add_subdirectory(src/visualizer)
+# ### Add source code for visualizer.
+# add_subdirectory(include/kimera-vio/visualizer)
+# add_subdirectory(src/visualizer)
 ### Add source code for third_party
 add_subdirectory(include/kimera-vio/third_party/triangle)
 add_subdirectory(src/third_party/triangle)
@@ -266,7 +266,7 @@ if(KIMERA_BUILD_TESTS)
     tests/testVioParams.cpp
     tests/testVisionImuFrontendParams.cpp
     tests/testFeatureDetectorParams.cpp
-    tests/testVisualizer3D.cpp # NEEDS UPDATE
+    # tests/testVisualizer3D.cpp # NEEDS UPDATE
     tests/testOnlineAlignment.cpp
     tests/testOpticalFlowPredictor.cpp
     )

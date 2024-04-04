@@ -45,10 +45,10 @@ class RgbdCameraFixture : public ::testing::Test {
  public:
   RgbdCameraFixture()
       : vio_params_(FLAGS_test_data_path + "/EurocParams"),
-        rgbd_camera_(nullptr),
+        rgbd_camera_(nullptr) {,
         // visualizer_3d_(nullptr),
         // display_module_(nullptr),
-        display_input_queue_("display_input_queue") {
+        // display_input_queue_("display_input_queue") {
     // Set sequential mode
     vio_params_.parallel_run_ = false;
 
