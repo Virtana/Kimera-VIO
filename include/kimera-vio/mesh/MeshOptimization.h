@@ -48,8 +48,7 @@ class MeshOptimization {
  public:
   MeshOptimization(const MeshOptimizerType& solver_type,
                    const MeshColorType& mesh_color_type,
-                   Camera::ConstPtr camera,
-                   OpenCvVisualizer3D::Ptr visualizer = nullptr);
+                   Camera::ConstPtr camera);
   virtual ~MeshOptimization() = default;
 
   /**

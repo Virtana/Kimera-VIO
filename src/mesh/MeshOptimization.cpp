@@ -40,8 +40,7 @@ namespace VIO {
 
 MeshOptimization::MeshOptimization(const MeshOptimizerType& solver_type,
                                    const MeshColorType& mesh_color_type,
-                                   Camera::ConstPtr camera,
-                                   OpenCvVisualizer3D::Ptr visualizer)
+                                   Camera::ConstPtr camera)
     : mesh_optimizer_type_(solver_type),
       mono_camera_(camera),
       body_pose_cam_(camera->getBodyPoseCam()),
@@ -278,9 +277,9 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
   CHECK(!noisy_pcl.empty());
   CHECK(mono_camera_);
 
-  // For visualization
-  VisualizerOutput::UniquePtr output = VIO::make_unique<VisualizerOutput>();
-  output->visualization_type_ = VisualizationType::kPointcloud;
+  // // For visualization
+  // VisualizerOutput::UniquePtr output = VIO::make_unique<VisualizerOutput>();
+  // output->visualization_type_ = VisualizationType::kPointcloud;
 
   // Need to visualizeScene again because the image of the camera frustum
   // was updated
