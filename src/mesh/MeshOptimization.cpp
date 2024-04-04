@@ -631,7 +631,7 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
             } break;
             case MeshColorType::kVertexDepthVariance: {
               // Use variances of the vertices
-              vtx_color = cv::Scalar(
+              vtx_color = cv::Vec3b(
                   0,
                   0,
                   std::round(std_deviation / kScaleStdDeviation * 255.0));
@@ -639,7 +639,7 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
             case MeshColorType::kVertexSupport: {
               // Use the number of datapoints that support this vertex
               vtx_color =
-                  cv::Scalar(std::round(vertex_supports[gtsam::Key(vtx_id)] /
+                  cv::Vec3b(std::round(vertex_supports[gtsam::Key(vtx_id)] /
                                         max_vertex_support * 255.0),
                              0,
                              0);
