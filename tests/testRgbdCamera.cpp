@@ -28,13 +28,13 @@
 #include "kimera-vio/mesh/MeshUtils.h"
 #include "kimera-vio/pipeline/Pipeline-definitions.h"
 #include "kimera-vio/utils/UtilsOpenCV.h"
-#include "kimera-vio/visualizer/Display.h"
-#include "kimera-vio/visualizer/DisplayFactory.h"
-#include "kimera-vio/visualizer/DisplayModule.h"
-#include "kimera-vio/visualizer/OpenCvDisplayParams.h"
-#include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
-#include "kimera-vio/visualizer/Visualizer3D.h"
-#include "kimera-vio/visualizer/Visualizer3DFactory.h"
+// #include "kimera-vio/visualizer/Display.h"
+// #include "kimera-vio/visualizer/DisplayFactory.h"
+// #include "kimera-vio/visualizer/DisplayModule.h"
+// #include "kimera-vio/visualizer/OpenCvDisplayParams.h"
+// #include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
+// #include "kimera-vio/visualizer/Visualizer3D.h"
+// #include "kimera-vio/visualizer/Visualizer3DFactory.h"
 
 DECLARE_string(test_data_path);
 DECLARE_bool(display);
@@ -46,8 +46,8 @@ class RgbdCameraFixture : public ::testing::Test {
   RgbdCameraFixture()
       : vio_params_(FLAGS_test_data_path + "/EurocParams"),
         rgbd_camera_(nullptr),
-        visualizer_3d_(nullptr),
-        display_module_(nullptr),
+        // visualizer_3d_(nullptr),
+        // display_module_(nullptr),
         display_input_queue_("display_input_queue") {
     // Set sequential mode
     vio_params_.parallel_run_ = false;
@@ -56,11 +56,11 @@ class RgbdCameraFixture : public ::testing::Test {
     rgbd_camera_ =
         VIO::make_unique<RgbdCamera>(vio_params_.camera_params_.at(0));
 
-    // Create visualizer
-    VisualizationType viz_type = VisualizationType::kPointcloud;
-    BackendType backend_type = BackendType::kStereoImu;
-    visualizer_3d_ =
-        VIO::make_unique<OpenCvVisualizer3D>(viz_type, backend_type);
+    // // Create visualizer
+    // VisualizationType viz_type = VisualizationType::kPointcloud;
+    // BackendType backend_type = BackendType::kStereoImu;
+    // visualizer_3d_ =
+    //     VIO::make_unique<OpenCvVisualizer3D>(viz_type, backend_type);
 
     // Create Displayer
     // CHECK(vio_params_.display_params_);
@@ -82,37 +82,37 @@ class RgbdCameraFixture : public ::testing::Test {
   void SetUp() override {}
   void TearDown() override {}
 
-  void displayPcl(const cv::Mat& pcl) {
-    CHECK(!pcl.empty());
-    VisualizerOutput::UniquePtr output = VIO::make_unique<VisualizerOutput>();
-    output->visualization_type_ = VisualizationType::kPointcloud;
+  // void displayPcl(const cv::Mat& pcl) {
+  //   CHECK(!pcl.empty());
+  //   VisualizerOutput::UniquePtr output = VIO::make_unique<VisualizerOutput>();
+  //   output->visualization_type_ = VisualizationType::kPointcloud;
 
-    // Depth image contains INFs. We have to remove them:
-    cv::Mat_<cv::Point3f> valid_depth = cv::Mat(1, 0, CV_32FC3);
-    for (int32_t u = 0; u < pcl.rows; ++u) {
-      for (int32_t v = 0; v < pcl.cols; ++v) {
-        const cv::Point3f& xyz = pcl.at<cv::Point3f>(u, v);
-        if (isValidPoint(xyz, 10000.0, 0.0, 10.0)) {
-          valid_depth.push_back(xyz);
-        }
-      }
-    }
-    CHECK(!valid_depth.empty());
-    CHECK(visualizer_3d_);
-    visualizer_3d_->visualizePointCloud(valid_depth, &output->widgets_);
-    CHECK_GT(output->widgets_.size(), 0u);
-    CHECK(display_module_);
-    display_module_->spinOnce(std::move(output));
-  }
+  //   // Depth image contains INFs. We have to remove them:
+  //   cv::Mat_<cv::Point3f> valid_depth = cv::Mat(1, 0, CV_32FC3);
+  //   for (int32_t u = 0; u < pcl.rows; ++u) {
+  //     for (int32_t v = 0; v < pcl.cols; ++v) {
+  //       const cv::Point3f& xyz = pcl.at<cv::Point3f>(u, v);
+  //       if (isValidPoint(xyz, 10000.0, 0.0, 10.0)) {
+  //         valid_depth.push_back(xyz);
+  //       }
+  //     }
+  //   }
+  //   CHECK(!valid_depth.empty());
+  //   CHECK(visualizer_3d_);
+  //   visualizer_3d_->visualizePointCloud(valid_depth, &output->widgets_);
+  //   CHECK_GT(output->widgets_.size(), 0u);
+  //   CHECK(display_module_);
+  //   display_module_->spinOnce(std::move(output));
+  // }
 
  protected:
   VioParams vio_params_;
   RgbdCamera::UniquePtr rgbd_camera_;
 
   //! For visualization only
-  OpenCvVisualizer3D::Ptr visualizer_3d_;
-  DisplayModule::UniquePtr display_module_;
-  DisplayModule::InputQueue display_input_queue_;
+  // OpenCvVisualizer3D::Ptr visualizer_3d_;
+  // DisplayModule::UniquePtr display_module_;
+  // DisplayModule::InputQueue display_input_queue_;
 };
 
 TEST_F(RgbdCameraFixture, convertToPoincloud) {
@@ -175,12 +175,12 @@ TEST_F(RgbdCameraFixture, convertToPoincloud) {
   VLOG(5) << "Actual cloud: " << actual_cloud;
   EXPECT_TRUE(
       UtilsOpenCV::compareCvMatsUpToTol(expected_cloud, actual_cloud, 0.00001));
-  if (FLAGS_display) {
-    LOG(WARNING) << "Visualizing Expected cloud";
-    displayPcl(expected_cloud);
-    LOG(WARNING) << "Visualizing Actual cloud";
-    displayPcl(actual_cloud);
-  }
+  // if (FLAGS_display) {
+  //   LOG(WARNING) << "Visualizing Expected cloud";
+  //   displayPcl(expected_cloud);
+  //   LOG(WARNING) << "Visualizing Actual cloud";
+  //   displayPcl(actual_cloud);
+  // }
 }
 
 }  // namespace VIO
