@@ -44,15 +44,14 @@ MeshOptimization::MeshOptimization(const MeshOptimizerType& solver_type,
                                    const MeshColorType& mesh_color_type,
                                    Camera::ConstPtr camera,
                                    OpenCvVisualizer3D::Ptr visualizer)
-    : visualizer_(visualizer),
-      mesh_optimizer_type_(solver_type),
+    : mesh_optimizer_type_(solver_type),
       mono_camera_(camera),
       body_pose_cam_(camera->getBodyPoseCam()),
-      window_("Mesh Optimization"),
+      // window_("Mesh Optimization"),
       mesh_color_type_(mesh_color_type) {
   CHECK(camera);
-  window_.setBackgroundColor(cv::Vec3b(255, 255, 255); // white
-  window_.setFullScreen(true);
+  // window_.setBackgroundColor(cv::Vec3b(255, 255, 255); // white
+  // window_.setFullScreen(true);
 }
 
 MeshOptimizationOutput::UniquePtr MeshOptimization::spinOnce(

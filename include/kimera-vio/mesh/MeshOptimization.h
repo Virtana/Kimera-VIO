@@ -184,7 +184,7 @@ class MeshOptimization {
   /// 3D plotting
   // TODO(Toni) this should be done by the display module...
 //   cv::viz::Viz3d window_;
-//   MeshColorType mesh_color_type_;
+  MeshColorType mesh_color_type_;
 //   OpenCvVisualizer3D::Ptr visualizer_;
 };
 
