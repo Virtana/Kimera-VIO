@@ -26,9 +26,9 @@
 #include "kimera-vio/mesh/MesherFactory.h"
 #include "kimera-vio/utils/Statistics.h"
 #include "kimera-vio/utils/Timer.h"
-#include "kimera-vio/visualizer/DisplayFactory.h"
-#include "kimera-vio/visualizer/Visualizer3D.h"
-#include "kimera-vio/visualizer/Visualizer3DFactory.h"
+// #include "kimera-vio/visualizer/DisplayFactory.h"
+// #include "kimera-vio/visualizer/Visualizer3D.h"
+// #include "kimera-vio/visualizer/Visualizer3DFactory.h"
 
 namespace VIO {
 

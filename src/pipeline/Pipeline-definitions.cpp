@@ -23,8 +23,8 @@
 #include "kimera-vio/frontend/VisionImuFrontendParams.h"
 #include "kimera-vio/imu-frontend/ImuFrontendParams.h"
 #include "kimera-vio/loopclosure/LoopClosureDetectorParams.h"
-#include "kimera-vio/visualizer/DisplayParams.h"
-#include "kimera-vio/visualizer/OpenCvDisplay.h" // for ocv display params...
+// #include "kimera-vio/visualizer/DisplayParams.h"
+// #include "kimera-vio/visualizer/OpenCvDisplay.h" // for ocv display params...
 
 #include <glog/logging.h>
 
