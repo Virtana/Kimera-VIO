@@ -1,8 +1,8 @@
 #include "kimera-vio/playground/EurocPlayground.h"
 #include "kimera-vio/mesh/MeshUtils.h"
-#include "kimera-vio/visualizer/OpenCvDisplay.h"
-#include "kimera-vio/visualizer/OpenCvDisplayParams.h"
-#include "kimera-vio/visualizer/Visualizer3D-definitions.h"
+// #include "kimera-vio/visualizer/OpenCvDisplay.h"
+// #include "kimera-vio/visualizer/OpenCvDisplayParams.h"
+// #include "kimera-vio/visualizer/Visualizer3D-definitions.h"
 
 namespace VIO {
 

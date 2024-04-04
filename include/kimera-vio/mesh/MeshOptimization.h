@@ -31,7 +31,6 @@
 #include "kimera-vio/mesh/MeshOptimization-definitions.h"
 #include "kimera-vio/mesh/Mesher-definitions.h"
 #include "kimera-vio/utils/Macros.h"
-#include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
 
 namespace VIO {
 
