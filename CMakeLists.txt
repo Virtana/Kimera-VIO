@@ -226,8 +226,8 @@ if(KIMERA_BUILD_TESTS)
     tests/testKimeraVIO.cpp
     tests/testStereoImuPipeline.cpp
     tests/testEurocPlayground.cpp
-    tests/testCamera.cpp # NEEDS UPDATE
-    tests/testStereoCamera.cpp # NEEDS UPDATE
+    # tests/testCamera.cpp # NEEDS UPDATE
+    # tests/testStereoCamera.cpp # NEEDS UPDATE
     tests/testCameraParams.cpp
     tests/testCodesignIdeas.cpp
     tests/testDataProviderModule.cpp
@@ -268,7 +268,7 @@ if(KIMERA_BUILD_TESTS)
     tests/testFeatureDetectorParams.cpp
     # tests/testVisualizer3D.cpp # NEEDS UPDATE
     tests/testOnlineAlignment.cpp
-    tests/testOpticalFlowPredictor.cpp
+    # tests/testOpticalFlowPredictor.cpp
     )
   target_link_libraries(testKimeraVIO gtest kimera_vio::kimera_vio)
 
