@@ -70,7 +70,7 @@ class MonoDataProviderModule : public DataProviderModule {
   //! you should not block the sensor processing.
   inline void fillLeftFrameQueueBlockingIfFull(Frame::UniquePtr left_frame) {
     CHECK(left_frame);
-    left_frame_queue_.pushBlockingIfFull(std::move(left_frame), 5u);
+    left_frame_queue_.pushBlockingIfFull(std::move(left_frame), 10u);
   }
 
  protected:
