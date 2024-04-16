@@ -29,7 +29,7 @@ RUN apt-get update && apt-get install -y xvfb
 #     mkdir build && \
 #     cd build && \
 #     cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DGTSAM_BUILD_TESTS=OFF -DGTSAM_BUILD_EXAMPLES_ALWAYS=OFF -DCMAKE_BUILD_TYPE=Release -DGTSAM_BUILD_UNSTABLE=ON -DGTSAM_TANGENT_PREINTEGRATION=OFF .. && \
-#     make -j$(nproc) install
+#     make -j4 install
 RUN apt-get update && apt-get install -y libboost-all-dev
 ADD https://api.github.com/repos/borglab/gtsam/git/refs/heads/master version.json
 RUN git clone https://github.com/borglab/gtsam.git
@@ -39,7 +39,7 @@ RUN cd gtsam && \
     mkdir build && \
     cd build && \
     cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DGTSAM_BUILD_TESTS=OFF -DGTSAM_BUILD_EXAMPLES_ALWAYS=OFF -DCMAKE_BUILD_TYPE=Release -DGTSAM_BUILD_UNSTABLE=ON -DGTSAM_TANGENT_PREINTEGRATION=OFF .. && \
-    make -j$(nproc) install
+    make -j4 install
 
 # Install OpenCV for Ubuntu 18.04
 RUN apt-get update && apt-get install -y \
@@ -65,7 +65,7 @@ RUN cd opencv/build && \
       -D BUILD_opencv_python2=OFF \
       -D BUILD_opencv_python3=OFF \
       -DOPENCV_EXTRA_MODULES_PATH=$DIRPATH/opencv_contrib/modules .. && \
-      make -j$(nproc) install
+      make -j4 install
 
 # Install Open_GV
 RUN git clone https://github.com/laurentkneip/opengv
@@ -76,7 +76,7 @@ RUN cd opengv/build && \
       -DCMAKE_INSTALL_PREFIX=/usr/local \
       -DEIGEN_INCLUDE_DIRS=$DIRPATH/gtsam/gtsam/3rdparty/Eigen \
       -DEIGEN_INCLUDE_DIR=$DIRPATH/gtsam/gtsam/3rdparty/Eigen .. && \
-      make -j$(nproc) install
+      make -j4 install
 
 # Install DBoW2
 RUN git clone https://github.com/dorian3d/DBoW2.git
@@ -84,7 +84,7 @@ RUN cd DBoW2 && \
       mkdir build && \
       cd build && \
       cmake .. && \
-      make -j$(nproc) install
+      make -j4 install
 
 # Install RobustPGO
 ADD https://api.github.com/repos/MIT-SPARK/Kimera-RPGO/git/refs/heads/master version.json
@@ -93,7 +93,7 @@ RUN cd Kimera-RPGO && \
       mkdir build && \
       cd build && \
       cmake .. && \
-      make -j$(nproc)
+      make -j4
 
 ## [Optional] Install Kimera-VIO-Evaluation from PyPI
 RUN apt-get update && \
@@ -135,7 +135,8 @@ RUN apt-get update && apt-get install -y libgflags2.2 libgflags-dev libgoogle-gl
 
 # Install Kimera-VIO
 RUN git clone https://github.com/MIT-SPARK/Kimera-VIO.git
-RUN cd Kimera-VIO && mkdir build && cd build && cmake .. && make -j$(nproc) 
+# Checkout to hash that last worked for us.
+RUN cd Kimera-VIO && git checkout 641576fd86bdecbd663b4db3cb068f49502f3a2c && mkdir build && cd build && cmake .. && make -j4
 
 # Download and extract EuRoC dataset.
 RUN apt-get update && apt-get install -y wget
