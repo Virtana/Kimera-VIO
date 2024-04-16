@@ -2,6 +2,7 @@
 --log_output=false
 --backend_type=1
 --regular_vio_backend_modality=0
+--parallel_run=true
 --deterministic_random_number_generator=true
 
 # 2D Visualization
@@ -9,12 +10,12 @@
 --visualize_feature_tracks=true
 
 # 3D Visualization
---visualize=true
+--visualize=false
 --visualize_lmk_type=false
---visualize_mesh=true
+--visualize_mesh=false
 --visualize_mesh_2d=false
 --visualize_mesh_with_colored_polygon_clusters=false
---visualize_point_cloud=true
+--visualize_point_cloud=false
 --visualize_convex_hull=false
 --visualize_plane_constraints=false
 --visualize_planes=false
@@ -32,7 +33,7 @@
 
 # For displaying/saving Frontend images:
 --visualize_frontend_images=false
---save_frontend_images=false
---log_feature_tracks=false
---log_mono_tracking_images=false
+--save_frontend_images=true
+--log_feature_tracks=true
+--log_mono_tracking_images=true
 --log_stereo_matching_images=false
