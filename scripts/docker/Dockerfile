@@ -133,9 +133,14 @@ RUN ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
 # Install glog, gflags
 RUN apt-get update && apt-get install -y libgflags2.2 libgflags-dev libgoogle-glog0v5 libgoogle-glog-dev
 
-# Install Kimera-VIO
+# Install Kimera-VIO (original)
 RUN git clone https://github.com/MIT-SPARK/Kimera-VIO.git
-RUN cd Kimera-VIO && mkdir build && cd build && cmake .. && make -j4 
+RUN cd Kimera-VIO && git checkout 641576fd86bdecbd663b4db3cb068f49502f3a2c && mkdir build && cd build && cmake .. && make -j4 
+
+# Clone Kimera-VIO fork
+RUN git clone https://github.com/Virtana/Kimera-VIO.git Kimera-VIO-fork
+RUN cd Kimera-VIO-fork && git checkout origin/sarika/cross-compiling/docker
+
 
 # Download and extract EuRoC dataset.
 RUN apt-get update && apt-get install -y wget
