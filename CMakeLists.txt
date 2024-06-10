@@ -169,7 +169,8 @@ endif(Pangolin_FOUND)
 
 target_compile_options(${PROJECT_NAME}
   PRIVATE -Wall -pipe
-  # PRIVATE -march=native
+  PRIVATE -mtune=cortex-a55
+  PRIVATE -march=armv8.2-a
 )
 
 # We would just need to say cxx_std_11 if we were using cmake 3.8
@@ -185,7 +186,7 @@ target_link_libraries(stereoVIOEuroc PUBLIC kimera_vio::kimera_vio)
 
 ############################### TESTS ##########################################
 ### Add testing
-option(KIMERA_BUILD_TESTS "Build tests" ON)
+option(KIMERA_BUILD_TESTS "Build tests" OFF)
 if(KIMERA_BUILD_TESTS)
   # Download and unpack googletest at configure time
   # TODO Consider doing the same for glog, gflags, although it might
