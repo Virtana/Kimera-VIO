@@ -13,6 +13,7 @@
  */
 
 #include "kimera-vio/mesh/MesherFactory.h"
+#include <gflags/gflags.h> 
 
 // If you want to serialize to a file to be able to later load that mesh.
 DEFINE_bool(serialize_mesh_2d3d, false, "Serialize 2D/3D Mesh to file.");
