@@ -30,6 +30,7 @@ RUN apt-get update && apt-get install -y xvfb
 #     cd build && \
 #     cmake -DCMAKE_INSTALL_PREFIX=/usr/local -DGTSAM_BUILD_TESTS=OFF -DGTSAM_BUILD_EXAMPLES_ALWAYS=OFF -DCMAKE_BUILD_TYPE=Release -DGTSAM_BUILD_UNSTABLE=ON -DGTSAM_TANGENT_PREINTEGRATION=OFF .. && \
 #     make -j4 install
+
 RUN apt-get update && apt-get install -y libboost-all-dev
 ADD https://api.github.com/repos/borglab/gtsam/git/refs/heads/master version.json
 RUN git clone https://github.com/borglab/gtsam.git
@@ -93,7 +94,7 @@ RUN cd Kimera-RPGO && \
       mkdir build && \
       cd build && \
       cmake .. && \
-      make -j4
+      make -j4 install
 
 ## [Optional] Install Kimera-VIO-Evaluation from PyPI
 RUN apt-get update && \
@@ -134,21 +135,19 @@ RUN ssh-keyscan -t rsa github.com >> /root/.ssh/known_hosts
 RUN apt-get update && apt-get install -y libgflags2.2 libgflags-dev libgoogle-glog0v5 libgoogle-glog-dev
 
 # Install Kimera-VIO (original)
-RUN git clone https://github.com/MIT-SPARK/Kimera-VIO.git
-RUN cd Kimera-VIO && git checkout 641576fd86bdecbd663b4db3cb068f49502f3a2c && mkdir build && cd build && cmake .. && make -j4 
+# RUN git clone https://github.com/MIT-SPARK/Kimera-VIO.git
+# RUN cd Kimera-VIO && git checkout 641576fd86bdecbd663b4db3cb068f49502f3a2c && mkdir build && cd build && cmake .. && make -j4 
 
 # Clone Kimera-VIO fork
 RUN git clone https://github.com/Virtana/Kimera-VIO.git Kimera-VIO-fork
 RUN cd Kimera-VIO-fork && git checkout origin/sarika/cross-compiling/docker
 
+# Download euroc dataset
+# RUN apt-get update && apt-get install -y wget
+# RUN wget http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/vicon_room1/V1_01_easy/V1_01_easy.zip
+# RUN mkdir -p $DIRPATH/euroc && unzip V1_01_easy.zip -d $DIRPATH/euroc
+# RUN bash $DIRPATH/Kimera-VIO/scripts/euroc/yamelize.bash -p $DIRPATH/euroc
 
-# Download and extract EuRoC dataset.
-RUN apt-get update && apt-get install -y wget
-RUN wget http://robotics.ethz.ch/~asl-datasets/ijrr_euroc_mav_dataset/vicon_room1/V1_01_easy/V1_01_easy.zip
-RUN mkdir -p $DIRPATH/euroc && unzip V1_01_easy.zip -d $DIRPATH/euroc
-
-# Yamelize euroc dataset
-RUN bash $DIRPATH/Kimera-VIO/scripts/euroc/yamelize.bash -p $DIRPATH/euroc
-
-#CMD xvfb-run $DIRPATH/Kimera-VIO/scripts/stereoVIOEuroc.bash -p $DIRPATH/euroc -r
-CMD $DIRPATH/Kimera-VIO/scripts/stereoVIOEuroc.bash -p $DIRPATH/euroc -r
+# # Yamelize euroc dataset
+# CMD xvfb-run $DIRPATH/Kimera-VIO/scripts/stereoVIOEuroc.bash -p $DIRPATH/euroc -r
+# CMD $DIRPATH/Kimera-VIO/scripts/stereoVIOEuroc.bash -p $DIRPATH/euroc -r
