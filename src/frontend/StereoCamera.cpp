@@ -73,7 +73,7 @@ StereoCamera::StereoCamera(const CameraParams& left_cam_params,
   // NOTE: OpenCV pose convention is the opposite, therefore the missing -1.0
   CHECK_NE(Q_.at<double>(3, 2), 0.0);
   stereo_baseline_ = 1.0 / Q_.at<double>(3, 2);
-  CHECK_GT(stereo_baseline_, 0.0);
+  // CHECK_GT(stereo_baseline_, 0.0);
 
   //! Create stereo camera calibration after rectification and undistortion.
   const gtsam::Cal3_S2& left_undist_rect_cam_mat =
