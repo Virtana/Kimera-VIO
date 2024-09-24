@@ -31,9 +31,12 @@
 #include "kimera-vio/visualizer/DisplayFactory.h"
 #include "kimera-vio/visualizer/DisplayModule.h"
 #include "kimera-vio/visualizer/OpenCvDisplayParams.h"
-#include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
+#include "kimera-vio/visualizer_stubs/BaseOpenCvVisualizer3D.h"
+#ifdef KIMERA_BUILD_VISUALIZER  
+  #include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
+  #include "kimera-vio/visualizer/Visualizer3DFactory.h"
+#endif
 #include "kimera-vio/visualizer/Visualizer3D.h"
-#include "kimera-vio/visualizer/Visualizer3DFactory.h"
 
 DECLARE_string(test_data_path);
 DECLARE_bool(display);
@@ -55,11 +58,12 @@ class RgbdCameraFixture : public ::testing::Test {
     rgbd_camera_ =
         std::make_unique<RgbdCamera>(vio_params_.camera_params_.at(0));
 
+    #ifdef KIMERA_BUILD_VISUALIZER
     // Create visualizer
     VisualizationType viz_type = VisualizationType::kPointcloud;
     BackendType backend_type = BackendType::kStereoImu;
     visualizer_3d_ =
-        std::make_unique<OpenCvVisualizer3D>(viz_type, backend_type);
+      std::make_unique<OpenCvVisualizer3D>(viz_type, backend_type);
 
     // Create Displayer
     if (FLAGS_display) {
@@ -77,6 +81,7 @@ class RgbdCameraFixture : public ::testing::Test {
           vio_params_.parallel_run_,
           std::make_unique<OpenCv3dDisplay>(new_display_params, nullptr));
     }
+    #endif
   }
   ~RgbdCameraFixture() override = default;
 
@@ -84,6 +89,7 @@ class RgbdCameraFixture : public ::testing::Test {
   void SetUp() override {}
   void TearDown() override {}
 
+  #ifdef KIMERA_BUILD_VISUALIZER
   void displayPcl(const cv::Mat& pcl) {
     CHECK(!pcl.empty());
     VisualizerOutput::UniquePtr output = std::make_unique<VisualizerOutput>();
@@ -106,13 +112,14 @@ class RgbdCameraFixture : public ::testing::Test {
     CHECK(display_module_);
     display_module_->spinOnce(std::move(output));
   }
+  #endif
 
  protected:
   VioParams vio_params_;
   RgbdCamera::UniquePtr rgbd_camera_;
 
   //! For visualization only
-  OpenCvVisualizer3D::Ptr visualizer_3d_;
+  BaseOpenCvVisualizer3D::Ptr visualizer_3d_;
   DisplayModule::UniquePtr display_module_;
   DisplayModule::InputQueue display_input_queue_;
 };
@@ -177,12 +184,14 @@ TEST_F(RgbdCameraFixture, convertToPoincloud) {
   VLOG(5) << "Actual cloud: " << actual_cloud;
   EXPECT_TRUE(
       UtilsOpenCV::compareCvMatsUpToTol(expected_cloud, actual_cloud, 0.00001));
+  #ifdef KIMERA_BUILD_VISUALIZER
   if (FLAGS_display) {
     LOG(WARNING) << "Visualizing Expected cloud";
     displayPcl(expected_cloud);
     LOG(WARNING) << "Visualizing Actual cloud";
     displayPcl(actual_cloud);
   }
+  #endif
 }
 
 }  // namespace VIO

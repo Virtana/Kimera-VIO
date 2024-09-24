@@ -31,7 +31,11 @@
 #include "kimera-vio/mesh/MeshOptimization-definitions.h"
 #include "kimera-vio/mesh/Mesher-definitions.h"
 #include "kimera-vio/utils/Macros.h"
-#include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
+#include "kimera-vio/visualizer_stubs/BaseOpenCvVisualizer3D.h"
+
+#ifdef KIMERA_BUILD_VISUALIZER
+    #include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
+#endif
 
 namespace VIO {
 
@@ -50,7 +54,7 @@ class MeshOptimization {
   MeshOptimization(const MeshOptimizerType& solver_type,
                    const MeshColorType& mesh_color_type,
                    Camera::ConstPtr camera,
-                   OpenCvVisualizer3D::Ptr visualizer = nullptr);
+                   BaseOpenCvVisualizer3D::Ptr visualizer = nullptr);
   virtual ~MeshOptimization() = default;
 
   /**
@@ -65,18 +69,18 @@ class MeshOptimization {
   static void draw2dMeshOnImg(
       const Mesh2D& mesh_2d,
       cv::Mat* img,
-      const cv::viz::Color& color = cv::viz::Color::red(),
+      const cv::Vec3b& color = cv::Vec3b(0, 0, 255), //red
       const size_t& thickness = 1u,
       const int line_type = CV_AA);
 
-  //! Visualization functions
-  void draw3dMesh(const std::string& id,
-                  const Mesh3D& mesh_3d,
-                  bool display_as_wireframe = false,
-                  const double& opacity = 1.0);
-
-  //! Render the collected visualizations
-  void spinDisplay();
+   //! Visualization functions
+   void draw3dMesh(const std::string& id,
+                   const Mesh3D& mesh_3d,
+                   bool display_as_wireframe = false,
+                   const double& opacity = 1.0);
+   
+   //! Render the collected visualizations
+   void spinDisplay();
 
  public:
   // In public only for testing... please remove.
@@ -132,6 +136,10 @@ class MeshOptimization {
                               const cv::Point2f& v2,
                               const cv::Point2f& v3);
 
+  void runVisualizerPrintTest() {
+        if (visualizer_) visualizer_->printTest();
+  }
+
  private:
   /**
    * @brief solveOptimalMesh
@@ -157,7 +165,7 @@ class MeshOptimization {
 
   void drawPixelOnImg(const cv::Point2f& pixel,
                       const cv::Mat& img,
-                      const cv::viz::Color& color = cv::viz::Color::red(),
+                      const cv::Vec3b& color = cv::Vec3b(0, 0, 255), //red
                       const size_t& pixel_size = 5u);
 
  public:
@@ -183,9 +191,11 @@ class MeshOptimization {
 
   /// 3D plotting
   // TODO(Toni) this should be done by the display module...
-  cv::viz::Viz3d window_;
+  #ifdef KIMERA_BUILD_VISUALIZER
+    cv::viz::Viz3d window_;
+  #endif
   MeshColorType mesh_color_type_;
-  OpenCvVisualizer3D::Ptr visualizer_;
+  BaseOpenCvVisualizer3D::Ptr visualizer_;
 };
 
 }  // namespace VIO

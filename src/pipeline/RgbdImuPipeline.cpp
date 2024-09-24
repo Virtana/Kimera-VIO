@@ -203,6 +203,7 @@ RgbdImuPipeline::RgbdImuPipeline(const VioParams& params,
                   std::placeholders::_1));
   }
 
+  #ifdef KIMERA_BUILD_VISUALIZER
   if (FLAGS_visualize) {
     visualizer_module_ = std::make_unique<VisualizerModule>(
         &display_input_queue_,
@@ -247,6 +248,7 @@ RgbdImuPipeline::RgbdImuPipeline(const VioParams& params,
                         params.display_params_,
                         std::bind(&RgbdImuPipeline::shutdown, this)));
   }
+  #endif
 
   launchThreads();
 }

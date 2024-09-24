@@ -35,12 +35,13 @@
 #include "kimera-vio/logging/Logger.h"
 #include "kimera-vio/mesh/Mesher-definitions.h"
 #include "kimera-vio/utils/Macros.h"
+#include "kimera-vio/visualizer_stubs/BaseOpenCvVisualizer3D.h"
 #include "kimera-vio/visualizer/Visualizer3D-definitions.h"
 #include "kimera-vio/visualizer/Visualizer3D.h"
 
 namespace VIO {
 
-class OpenCvVisualizer3D : public Visualizer3D {
+class OpenCvVisualizer3D : public Visualizer3D, public BaseOpenCvVisualizer3D {
  public:
   KIMERA_DELETE_COPY_CONSTRUCTORS(OpenCvVisualizer3D);
   KIMERA_POINTER_TYPEDEFS(OpenCvVisualizer3D);
@@ -81,6 +82,10 @@ class OpenCvVisualizer3D : public Visualizer3D {
   // Visualization calls are public in case the user wants to manually visualize
   // things, instead of running spinOnce and do it automatically.
 
+  void printTest() override {
+        LOG(INFO) << "OpenCvVisualizer3D::printTest()";
+  }
+
   static Mesh3DVizProperties texturizeMesh3D(const Timestamp& image_timestamp,
                                              const cv::Mat& texture_image,
                                              const Mesh2D& mesh_2d,
@@ -91,7 +96,7 @@ class OpenCvVisualizer3D : public Visualizer3D {
    * @param current_pose_gtsam Pose to be added
    * @param img Optional img to be displayed at the pose's frustum.
    */
-  void addPoseToTrajectory(const cv::Affine3d& pose);
+  void addPoseToTrajectory(const cv::Affine3d& pose) override;
 
   /**
    * @brief visualizeTrajectory3D
@@ -100,7 +105,7 @@ class OpenCvVisualizer3D : public Visualizer3D {
    * @param frustum_image
    * @param widgets_map
    */
-  void visualizeTrajectory3D(WidgetsMap* widgets_map);
+  void visualizeTrajectory3D(WidgetsMap* widgets_map) override;
 
   /**
    * @brief visualizeTrajectoryWithFrustums
@@ -128,14 +133,14 @@ class OpenCvVisualizer3D : public Visualizer3D {
       WidgetsMap* widgets_map,
       const std::string& widget_id = "Camera Pose with Frustum",
       const cv::Matx33d K =
-          cv::Matx33d(458, 0.0, 360, 0.0, 458, 240, 0.0, 0.0, 1.0));
+          cv::Matx33d(458, 0.0, 360, 0.0, 458, 240, 0.0, 0.0, 1.0)) override;
 
   /**
    * @brief visualizePlyMesh Visualize a PLY from filename (absolute path).
    * @param filename Absolute path to ply file
    * @param widgets output
    */
-  void visualizePlyMesh(const std::string& filename, WidgetsMap* widgets);
+  void visualizePlyMesh(const std::string& filename, WidgetsMap* widgets) override;
 
   /**
    * @brief visualizePointCloud Given a cv::Mat with each col being
@@ -151,9 +156,9 @@ class OpenCvVisualizer3D : public Visualizer3D {
                            WidgetsMap* widgets,
                            const cv::Affine3d& pose = cv::Affine3d(),
                            const cv::Mat& colors = cv::Mat(),
-                           const cv::Mat& normals = cv::Mat());
+                           const cv::Mat& normals = cv::Mat()) override;
 
-  void visualizeGlobalFrameOfReference(WidgetsMap* widgets, double scale = 1.0);
+  void visualizeGlobalFrameOfReference(WidgetsMap* widgets, double scale = 1.0) override;
 
   /**
    * @brief visualizeMesh3D
@@ -176,7 +181,7 @@ class OpenCvVisualizer3D : public Visualizer3D {
                        const cv::Mat& tcoords = cv::Mat(),
                        const cv::Mat& texture = cv::Mat(),
                        //! This has to be the same than the id in OpenCvDisplay
-                       const std::string& mesh_id = "Mesh");
+                       const std::string& mesh_id = "Mesh") override;
 
   //! Draw a line in opencv.
   void drawLine(const std::string& line_id,

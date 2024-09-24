@@ -75,6 +75,11 @@ else()
   message(STATUS "Vocabulary file exists, will not download.")
 endif()
 
+option(KIMERA_BUILD_VISUALIZER "Enable visualization" ON)
+if (KIMERA_BUILD_VISUALIZER)
+  add_definitions(-DKIMERA_BUILD_VISUALIZER)
+endif()
+
 ### Handle third party libraries
 add_subdirectory(third_party)
 
@@ -121,6 +126,7 @@ add_subdirectory(src/logging)
 add_subdirectory(include/kimera-vio/imu-frontend)
 add_subdirectory(src/imu-frontend)
 ### Add source code for visualizer.
+add_subdirectory(include/kimera-vio/visualizer_stubs)
 add_subdirectory(include/kimera-vio/visualizer)
 add_subdirectory(src/visualizer)
 
@@ -175,6 +181,9 @@ add_library(kimera_vio::kimera_vio ALIAS kimera_vio)
 add_executable(stereoVIOEuroc ./examples/KimeraVIO.cpp)
 target_link_libraries(stereoVIOEuroc PUBLIC kimera_vio::kimera_vio)
 
+add_executable(abstractTest ./examples/abstractTestPrint.cpp)
+target_link_libraries(abstractTest PUBLIC kimera_vio::kimera_vio)
+
 ############################### TESTS ##########################################
 ### Add testing
 option(KIMERA_BUILD_TESTS "Build tests" ON)
@@ -214,7 +223,7 @@ if(KIMERA_BUILD_TESTS)
 
   # Generate gtests.
   include(CTest)
-  add_executable(testKimeraVIO
+  set(TEST_SOURCES
     tests/testKimeraVIO.cpp
     tests/testStereoImuPipeline.cpp
     tests/testEurocPlayground.cpp
@@ -271,10 +280,18 @@ if(KIMERA_BUILD_TESTS)
     tests/testVisionImuFrontendParams.cpp
     tests/testFeatureDetectorParams.cpp
     tests/testFeatureDetector.cpp
-    tests/testVisualizer3D.cpp # NEEDS UPDATE
     tests/testOnlineAlignment.cpp
     tests/testOpticalFlowPredictor.cpp
   )
+
+  # Conditionally add visualizer-specific tests
+  if(KIMERA_BUILD_VISUALIZER)
+    list(APPEND TEST_SOURCES tests/testVisualizer3D.cpp)
+  endif()
+
+  # Pass the sources list to add_executable
+  add_executable(testKimeraVIO ${TEST_SOURCES})
+
   target_include_directories(testKimeraVIO PUBLIC tests/include)
   target_link_libraries(testKimeraVIO gtest gmock kimera_vio::kimera_vio)
 

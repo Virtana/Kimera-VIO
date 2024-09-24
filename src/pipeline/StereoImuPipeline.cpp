@@ -197,6 +197,7 @@ StereoImuPipeline::StereoImuPipeline(const VioParams& params,
                   std::placeholders::_1));
   }
 
+  #ifdef KIMERA_BUILD_VISUALIZER
   if (FLAGS_visualize) {
     visualizer_module_ = std::make_unique<VisualizerModule>(
         //! Send ouput of visualizer to the display_input_queue_
@@ -247,6 +248,7 @@ StereoImuPipeline::StereoImuPipeline(const VioParams& params,
                         params.display_params_,
                         std::bind(&StereoImuPipeline::shutdown, this)));
   }
+  #endif
 
   // All modules are ready, launch threads! If the parallel_run flag is set to
   // false this will not do anything.

@@ -196,6 +196,7 @@ MonoImuPipeline::MonoImuPipeline(const VioParams& params,
                   std::placeholders::_1));
   }
 
+  #ifdef KIMERA_BUILD_VISUALIZER
   if (FLAGS_visualize) {
     visualizer_module_ = std::make_unique<VisualizerModule>(
         //! Send ouput of visualizer to the display_input_queue_
@@ -250,6 +251,7 @@ MonoImuPipeline::MonoImuPipeline(const VioParams& params,
                         params.display_params_,
                         std::bind(&MonoImuPipeline::shutdown, this)));
   }
+  #endif
 
   launchThreads();
 }

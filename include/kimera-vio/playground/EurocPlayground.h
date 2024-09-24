@@ -28,12 +28,18 @@
 #include "kimera-vio/frontend/StereoCamera.h"
 #include "kimera-vio/frontend/StereoMatcher.h"
 #include "kimera-vio/frontend/feature-detector/FeatureDetector.h"
+#include "kimera-vio/visualizer_stubs/BaseOpenCvVisualizer3D.h"
+
 #include "kimera-vio/visualizer/Display.h"
 #include "kimera-vio/visualizer/DisplayFactory.h"
 #include "kimera-vio/visualizer/DisplayModule.h"
-#include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
-#include "kimera-vio/visualizer/Visualizer3D.h"
-#include "kimera-vio/visualizer/Visualizer3DFactory.h"
+
+#ifdef KIMERA_BUILD_VISUALIZER
+    #include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
+    #include "kimera-vio/visualizer/Visualizer3DFactory.h"
+    #include "kimera-vio/visualizer/OpenCvDisplay.h"
+    #include "kimera-vio/visualizer/OpenCvDisplayParams.h"
+#endif
 
 namespace VIO {
 
@@ -65,6 +71,7 @@ class EurocPlayground {
   ~EurocPlayground() = default;
 
  public:
+  #ifdef KIMERA_BUILD_VISUALIZER
   /**
    * @brief visualizeGtData Spawns a 3D window where all ground-truth data is
    * visualized according to given flags
@@ -72,9 +79,10 @@ class EurocPlayground {
    * @param viz_img_in_frustum Visualize actual images inside frustums
    * @param viz_pointcloud Visualize ground-truth 3D pointcloud
    */
-  void visualizeGtData(const bool& viz_traj,
-                       const bool& viz_img_in_frustum,
-                       const bool& viz_pointcloud);
+    void visualizeGtData(const bool& viz_traj,
+                        const bool& viz_img_in_frustum,
+                        const bool& viz_pointcloud);
+  #endif
 
   // Very naive!
   void projectVisibleLandmarksToCam(const StereoCamera& stereo_cam,
@@ -87,7 +95,7 @@ public:
   //! Params
   VioParams vio_params_;
 
-  OpenCvVisualizer3D::Ptr visualizer_3d_;
+  BaseOpenCvVisualizer3D::Ptr visualizer_3d_;
 
   //! Stereo Camera to back/project and do stereo dense reconstruction.
   StereoCamera::ConstPtr stereo_camera_;

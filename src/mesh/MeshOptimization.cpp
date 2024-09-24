@@ -33,8 +33,6 @@
 #include "kimera-vio/mesh/Mesher-definitions.h"
 #include "kimera-vio/utils/Macros.h"
 #include "kimera-vio/utils/UtilsOpenCV.h"
-#include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
-#include "kimera-vio/visualizer/Visualizer3D-definitions.h"
 
 namespace VIO {
 
@@ -49,16 +47,18 @@ constexpr float MeshOptimization::kMaxZ;
 MeshOptimization::MeshOptimization(const MeshOptimizerType& solver_type,
                                    const MeshColorType& mesh_color_type,
                                    Camera::ConstPtr camera,
-                                   OpenCvVisualizer3D::Ptr visualizer)
+                                   BaseOpenCvVisualizer3D::Ptr visualizer)
     : mesh_optimizer_type_(solver_type),
       mono_camera_(camera),
       body_pose_cam_(camera->getBodyPoseCam()),
-      window_("Mesh Optimization"),
       mesh_color_type_(mesh_color_type),
       visualizer_(visualizer) {
   CHECK(camera);
-  window_.setBackgroundColor(cv::viz::Color::white());
-  window_.setFullScreen(true);
+  #ifdef KIMERA_BUILD_VISUALIZER
+    window_ = cv::viz::Viz3d("Mesh Optimization");
+    window_.setBackgroundColor(cv::viz::Color::white());
+    window_.setFullScreen(true);
+  #endif
 }
 
 MeshOptimizationOutput::UniquePtr MeshOptimization::spinOnce(
@@ -68,7 +68,7 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::spinOnce(
 
 void MeshOptimization::draw2dMeshOnImg(const Mesh2D& mesh_2d,
                                        cv::Mat* img,
-                                       const cv::viz::Color& color,
+                                       const cv::Vec3b& color,
                                        const size_t& thickness,
                                        const int line_type) {
   CHECK_NOTNULL(img);
@@ -87,40 +87,42 @@ void MeshOptimization::draw2dMeshOnImg(const Mesh2D& mesh_2d,
   }
 }
 
-void MeshOptimization::draw3dMesh(const std::string& id,
-                                  const Mesh3D& mesh_3d,
-                                  bool display_as_wireframe,
-                                  const double& opacity) {
-  cv::Mat vertices_mesh;
-  cv::Mat polygons_mesh;
-  mesh_3d.getVerticesMeshToMat(&vertices_mesh);
-  mesh_3d.getPolygonsMeshToMat(&polygons_mesh);
-  cv::Mat colors_mesh = mesh_3d.getColorsMesh().t();  // Note the transpose.
-  if (colors_mesh.empty()) {
-    colors_mesh = cv::Mat(1u,
-                          mesh_3d.getNumberOfUniqueVertices(),
-                          CV_8UC3,
-                          cv::viz::Color::yellow());
-  }
+#ifdef KIMERA_BUILD_VISUALIZER
+  void MeshOptimization::draw3dMesh(const std::string& id,
+                                    const Mesh3D& mesh_3d,
+                                    bool display_as_wireframe,
+                                    const double& opacity) {
+    cv::Mat vertices_mesh;
+    cv::Mat polygons_mesh;
+    mesh_3d.getVerticesMeshToMat(&vertices_mesh);
+    mesh_3d.getPolygonsMeshToMat(&polygons_mesh);
+    cv::Mat colors_mesh = mesh_3d.getColorsMesh().t();  // Note the transpose.
+    if (colors_mesh.empty()) {
+      colors_mesh = cv::Mat(1u,
+                            mesh_3d.getNumberOfUniqueVertices(),
+                            CV_8UC3,
+                            cv::viz::Color::yellow());
+    }
 
-  // Build visual mesh
-  cv::viz::Mesh cv_mesh;
-  cv_mesh.cloud = vertices_mesh.t();
-  cv_mesh.polygons = polygons_mesh;
-  cv_mesh.colors = colors_mesh;
+    // Build visual mesh
+    cv::viz::Mesh cv_mesh;
+    cv_mesh.cloud = vertices_mesh.t();
+    cv_mesh.polygons = polygons_mesh;
+    cv_mesh.colors = colors_mesh;
 
-  // Build widget mesh
-  cv::viz::WMesh widget_cv_mesh(cv_mesh);
-  widget_cv_mesh.setRenderingProperty(cv::viz::SHADING, cv::viz::SHADING_FLAT);
-  widget_cv_mesh.setRenderingProperty(cv::viz::AMBIENT, 0);
-  widget_cv_mesh.setRenderingProperty(cv::viz::LIGHTING, 1);
-  widget_cv_mesh.setRenderingProperty(cv::viz::OPACITY, opacity);
-  if (display_as_wireframe) {
-    widget_cv_mesh.setRenderingProperty(cv::viz::REPRESENTATION,
-                                        cv::viz::REPRESENTATION_WIREFRAME);
+    // Build widget mesh
+    cv::viz::WMesh widget_cv_mesh(cv_mesh);
+    widget_cv_mesh.setRenderingProperty(cv::viz::SHADING, cv::viz::SHADING_FLAT);
+    widget_cv_mesh.setRenderingProperty(cv::viz::AMBIENT, 0);
+    widget_cv_mesh.setRenderingProperty(cv::viz::LIGHTING, 1);
+    widget_cv_mesh.setRenderingProperty(cv::viz::OPACITY, opacity);
+    if (display_as_wireframe) {
+      widget_cv_mesh.setRenderingProperty(cv::viz::REPRESENTATION,
+                                          cv::viz::REPRESENTATION_WIREFRAME);
+    }
+    window_.showWidget(id.c_str(), widget_cv_mesh);
   }
-  window_.showWidget(id.c_str(), widget_cv_mesh);
-}
+#endif
 
 void MeshOptimization::collectTriangleDataPointsFast(
     const cv::Mat& noisy_point_cloud,
@@ -287,6 +289,7 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
   CHECK(!noisy_pcl.empty());
   CHECK(mono_camera_);
 
+  #ifdef KIMERA_BUILD_VISUALIZER
   // For visualization
   VisualizerOutput::UniquePtr output = std::make_unique<VisualizerOutput>();
   output->visualization_type_ = VisualizationType::kPointcloud;
@@ -296,7 +299,7 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
   if (visualizer_) {
     // Flatten and get colors for pcl
     cv::Mat viz_cloud(0, 1, CV_32FC3, cv::Scalar(0));
-    cv::Mat colors_pcl = cv::Mat(0, 0, CV_8UC3, cv::viz::Color::red());
+    cv::Mat colors_pcl = cv::Mat(0, 0, CV_8UC3, cv::Vec3b(0, 0, 255));
     CHECK_EQ(img_.type(), CV_8UC1);
     if (noisy_pcl.rows != 1u || noisy_pcl.cols != 1u) {
       LOG(ERROR) << "Reshaping noisy_pcl!";
@@ -319,7 +322,8 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
         colors_pcl);
     // draw2dMeshOnImg(img_, mesh_2d);
     // spinDisplay();
-  }
+    }
+  #endif
 
   /// Step 1: Collect all datapoints that fall within triangle
   LOG(INFO) << "Collecting triangle data points.";
@@ -612,25 +616,25 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
           //! Add new vertex to polygon
           //! Color with covariance bgr:
           static constexpr double kScaleStdDeviation = 0.1;
-          cv::viz::Color vtx_color = cv::viz::Color::black();
+          cv::Vec3b vtx_color = cv::Vec3b(0, 0, 0); // black;
           switch (mesh_color_type_) {
             case MeshColorType::kVertexFlatColor: {
               // Use color of each pixel where the landmark is
               switch (mesh_count_ % 5) {
                 case 0:
-                  vtx_color = cv::viz::Color::red();
+                  vtx_color = cv::Vec3b(0, 0, 255); //red 
                   break;
                 case 1:
-                  vtx_color = cv::viz::Color::apricot();
+                  vtx_color = cv::Vec3b(177, 206, 251); //apricot
                   break;
                 case 2:
-                  vtx_color = cv::viz::Color::purple();
+                  vtx_color = cv::Vec3b(128, 0, 128); //purple
                   break;
                 case 3:
-                  vtx_color = cv::viz::Color::brown();
+                  vtx_color = cv::Vec3b(42, 42, 165); //brown
                   break;
                 case 4:
-                  vtx_color = cv::viz::Color::pink();
+                  vtx_color = cv::Vec3b(203, 192, 255); //pink
                   break;
               }
             } break;
@@ -639,20 +643,18 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
             } break;
             case MeshColorType::kVertexDepthVariance: {
               // Use variances of the vertices
-              vtx_color = cv::Scalar(
+              vtx_color = cv::Vec3b(
                   0,
                   0,
-                  std::round(std_deviation / kScaleStdDeviation * 255.0),
-                  255);
+                  std::round(std_deviation / kScaleStdDeviation * 255.0));
             } break;
             case MeshColorType::kVertexSupport: {
               // Use the number of datapoints that support this vertex
               vtx_color =
-                  cv::Scalar(std::round(vertex_supports[gtsam::Key(vtx_id)] /
+                  cv::Vec3b(std::round(vertex_supports[gtsam::Key(vtx_id)] /
                                         max_vertex_support * 255.0),
                              0,
-                             0,
-                             255);
+                             0);
             } break;
             default: {
               LOG(FATAL) << "Unrecognized mesh color type.";
@@ -674,15 +676,17 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
     } break;
   }
 
-  // Display reconstructed mesh.
-  if (visualizer_) {
-    LOG(INFO) << "Drawing optimized reconstructed mesh...";
-    draw3dMesh("Reconstructed Mesh " + std::to_string(mesh_count_),
-               reconstructed_mesh,
-               false,
-               0.9);
-    spinDisplay();
-  }
+  #ifdef KIMERA_BUILD_VISUALIZER
+    // Display reconstructed mesh.
+    if (visualizer_) {
+      LOG(INFO) << "Drawing optimized reconstructed mesh...";
+      draw3dMesh("Reconstructed Mesh " + std::to_string(mesh_count_),
+                reconstructed_mesh,
+                false,
+                0.9);
+      spinDisplay();
+    }
+  #endif
   MeshOptimizationOutput::UniquePtr mesh_output =
       std::make_unique<MeshOptimizationOutput>();
   mesh_output->optimized_mesh_3d = reconstructed_mesh;
@@ -759,15 +763,17 @@ bool MeshOptimization::pointInTriangle(const cv::Point2f& pt,
 
 void MeshOptimization::drawPixelOnImg(const cv::Point2f& pixel,
                                       const cv::Mat& img,
-                                      const cv::viz::Color& color,
+                                      const cv::Vec3b& color,
                                       const size_t& pixel_size) {
   // Draw the pixel on the image
   cv::circle(img, pixel, pixel_size, color, -1);
 }
 
-void MeshOptimization::spinDisplay() {
-  // Display 3D window
-  window_.spin();
-}
+#ifdef KIMERA_BUILD_VISUALIZER
+  void MeshOptimization::spinDisplay() {
+    // Display 3D window
+    window_.spin();
+  }
+#endif
 
 }  // namespace VIO
