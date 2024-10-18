@@ -75,6 +75,22 @@ else()
   message(STATUS "Vocabulary file exists, will not download.")
 endif()
 
+# Defines CMake option to compile visualization source code and features.
+option(KIMERA_BUILD_VISUALIZER "Enable visualization" ON)
+
+# TEMPORARY - Force enable option until implementation is complete, even if the user disables it
+if(NOT KIMERA_BUILD_VISUALIZER)
+    message(WARNING 
+        "Disabling KIMERA_BUILD_VISUALIZER is not permitted until visualization exclusion feature is fully implemented."
+        "\nKIMERA_BUILD_VISUALIZER will be enabled automatically...")
+    set(KIMERA_BUILD_VISUALIZER ON CACHE BOOL "Enable visualization" FORCE)
+endif()
+
+#  Defines macro for source code usage
+if (KIMERA_BUILD_VISUALIZER)
+  add_definitions(-DKIMERA_BUILD_VISUALIZER)
+endif()
+
 ### Handle third party libraries
 add_subdirectory(third_party)
 
@@ -120,9 +136,11 @@ add_subdirectory(src/logging)
 ### Add source code for imu Frontend
 add_subdirectory(include/kimera-vio/imu-frontend)
 add_subdirectory(src/imu-frontend)
-### Add source code for visualizer.
-add_subdirectory(include/kimera-vio/visualizer)
-add_subdirectory(src/visualizer)
+### Conditionally add source code for visualizer.
+if (KIMERA_BUILD_VISUALIZER)
+  add_subdirectory(include/kimera-vio/visualizer)
+  add_subdirectory(src/visualizer)
+endif()
 
 target_link_libraries(${PROJECT_NAME}
   PRIVATE
@@ -214,7 +232,7 @@ if(KIMERA_BUILD_TESTS)
 
   # Generate gtests.
   include(CTest)
-  add_executable(testKimeraVIO
+  set(TEST_SOURCES
     tests/testKimeraVIO.cpp
     tests/testStereoImuPipeline.cpp
     tests/testEurocPlayground.cpp
@@ -271,10 +289,19 @@ if(KIMERA_BUILD_TESTS)
     tests/testVisionImuFrontendParams.cpp
     tests/testFeatureDetectorParams.cpp
     tests/testFeatureDetector.cpp
-    tests/testVisualizer3D.cpp # NEEDS UPDATE
     tests/testOnlineAlignment.cpp
-    tests/testOpticalFlowPredictor.cpp
   )
+
+  # Add visualization targeted tests
+  if(KIMERA_BUILD_VISUALIZER)
+    list(APPEND TEST_SOURCES 
+      tests/testVisualizer3D.cpp
+      tests/testOpticalFlowPredictor.cpp)
+  endif()
+
+  # Pass the sources list for building executable
+  add_executable(testKimeraVIO ${TEST_SOURCES})
+
   target_include_directories(testKimeraVIO PUBLIC tests/include)
   target_link_libraries(testKimeraVIO gtest gmock kimera_vio::kimera_vio)
 
