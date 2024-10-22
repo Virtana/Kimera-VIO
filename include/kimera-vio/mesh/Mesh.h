@@ -20,9 +20,9 @@
 #include <map>
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/mat.hpp>
-#include <opencv2/viz/types.hpp>  // Just for color type.
 #include <vector>
 
+#include "kimera-vio/utils/ColorUtils.h"
 #include "kimera-vio/utils/Macros.h"
 #include "kimera-vio/utils/UtilsOpenCV.h"
 
@@ -35,7 +35,7 @@ class Mesh {
  public:
   KIMERA_POINTER_TYPEDEFS(Mesh);
   // Color for a vertex
-  typedef cv::Vec3b VertexColorRGB;
+  typedef cv::Scalar VertexColorRGB;
   // Normal for a vertex
   typedef cv::Point3f VertexNormal;
   typedef std::vector<VertexNormal> VertexNormals;
@@ -78,11 +78,11 @@ class Mesh {
         : lmk_id_(-1),
           vertex_position_(),
           vertex_normal_(),
-          vertex_color_(cv::viz::Color::white()) {}
+          vertex_color_(ColorUtils::white()) {}
 
     Vertex(const LandmarkId& lmk_id,
            const VertexPosition& vertex_position,
-           const VertexColorRGB& vertex_color = cv::viz::Color::white(),
+           const VertexColorRGB& vertex_color = ColorUtils::white(),
            const VertexNormal& vertex_normal = VertexNormal())
         : lmk_id_(lmk_id),
           vertex_position_(vertex_position),

@@ -2,6 +2,7 @@
 target_sources(kimera_vio
     PRIVATE
     "${CMAKE_CURRENT_LIST_DIR}/Accumulator.h"
+    "${CMAKE_CURRENT_LIST_DIR}/ColorUtils.h"
     "${CMAKE_CURRENT_LIST_DIR}/Histogram.h"
     "${CMAKE_CURRENT_LIST_DIR}/Macros.h"
     "${CMAKE_CURRENT_LIST_DIR}/Statistics.h"

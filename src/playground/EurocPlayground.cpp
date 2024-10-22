@@ -1,5 +1,6 @@
 #include "kimera-vio/playground/EurocPlayground.h"
 
+#include "kimera-vio/utils/ColorUtils.h"
 #include "kimera-vio/mesh/MeshUtils.h"
 #include "kimera-vio/visualizer/OpenCvDisplay.h"
 #include "kimera-vio/visualizer/OpenCvDisplayParams.h"
@@ -203,7 +204,7 @@ void EurocPlayground::visualizeGtData(const bool& viz_traj,
         // Depth image contains INFs. We have to remove them:
         CHECK_EQ(left_frame->img_.type(), CV_8UC1);  // for color
         cv::Mat_<cv::Point3f> valid_depth = cv::Mat(1, 0, CV_32FC3);
-        cv::Mat valid_colors = cv::Mat(1, 0, CV_8UC3, cv::viz::Color::red());
+        cv::Mat valid_colors = cv::Mat(1, 0, CV_8UC3, ColorUtils::red());
         for (int32_t v = 0; v < depth_map.rows; ++v) {
           for (int32_t u = 0; u < depth_map.cols; ++u) {
             const cv::Point3f& xyz = depth_map(v, u);

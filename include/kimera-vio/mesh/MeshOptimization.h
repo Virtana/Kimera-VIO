@@ -25,6 +25,7 @@
 #include <gtsam/geometry/Cal3_S2.h>
 #include <gtsam/geometry/Pose3.h>
 
+#include "kimera-vio/utils/ColorUtils.h"
 #include "kimera-vio/common/vio_types.h"
 #include "kimera-vio/frontend/Camera.h"
 #include "kimera-vio/mesh/Mesh.h"
@@ -65,7 +66,7 @@ class MeshOptimization {
   static void draw2dMeshOnImg(
       const Mesh2D& mesh_2d,
       cv::Mat* img,
-      const cv::viz::Color& color = cv::viz::Color::red(),
+      const cv::Scalar& color = ColorUtils::red(),
       const size_t& thickness = 1u,
       const int line_type = CV_AA);
 
@@ -157,7 +158,7 @@ class MeshOptimization {
 
   void drawPixelOnImg(const cv::Point2f& pixel,
                       const cv::Mat& img,
-                      const cv::viz::Color& color = cv::viz::Color::red(),
+                      const cv::Scalar& color = ColorUtils::red(),
                       const size_t& pixel_size = 5u);
 
  public:
