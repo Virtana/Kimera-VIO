@@ -69,15 +69,6 @@ class MeshOptimization {
       const size_t& thickness = 1u,
       const int line_type = CV_AA);
 
-  //! Visualization functions
-  void draw3dMesh(const std::string& id,
-                  const Mesh3D& mesh_3d,
-                  bool display_as_wireframe = false,
-                  const double& opacity = 1.0);
-
-  //! Render the collected visualizations
-  void spinDisplay();
-
  public:
   // In public only for testing... please remove.
 
@@ -183,7 +174,6 @@ class MeshOptimization {
 
   /// 3D plotting
   // TODO(Toni) this should be done by the display module...
-  cv::viz::Viz3d window_;
   MeshColorType mesh_color_type_;
   OpenCvVisualizer3D::Ptr visualizer_;
 };

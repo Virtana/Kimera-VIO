@@ -194,6 +194,15 @@ class OpenCvVisualizer3D : public Visualizer3D {
                 const cv::Point3d& pt2,
                 WidgetsMap* widgets);
 
+  //! Mesh visualization functions
+  void draw3dMesh(const std::string& id,
+                  const Mesh3D& mesh_3d,
+                  bool display_as_wireframe = false,
+                  const double& opacity = 1.0);
+
+  //! Render the collected visualizations
+  void meshSpinDisplay();
+
  private:
   //! Create a 2D mesh from 2D corners in an image, coded as a Frame class
   static cv::Mat visualizeMesh2D(
@@ -421,6 +430,9 @@ class OpenCvVisualizer3D : public Visualizer3D {
 
   WidgetIds widget_ids_to_remove_;
   WidgetIds widget_ids_to_remove_in_next_iter_;
+
+  // Used draw3dMesh and meshSpinDisplay functions
+  cv::viz::Viz3d meshWindow_;
 
   //! Colors & Scales
   cv::viz::Color cloud_color_ = cv::viz::Color::white();

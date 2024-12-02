@@ -1926,6 +1926,46 @@ void OpenCvVisualizer3D::colorMeshByClusters(const std::vector<Plane>& planes,
   }
 }
 
+void OpenCvVisualizer3D::draw3dMesh(const std::string& id,
+                                  const Mesh3D& mesh_3d,
+                                  bool display_as_wireframe,
+                                  const double& opacity) {
+  cv::Mat vertices_mesh;
+  cv::Mat polygons_mesh;
+  mesh_3d.getVerticesMeshToMat(&vertices_mesh);
+  mesh_3d.getPolygonsMeshToMat(&polygons_mesh);
+  cv::Mat colors_mesh = mesh_3d.getColorsMesh().t();  // Note the transpose.
+  if (colors_mesh.empty()) {
+    colors_mesh = cv::Mat(1u,
+                          mesh_3d.getNumberOfUniqueVertices(),
+                          CV_8UC3,
+                          cv::viz::Color::yellow());
+  }
+
+  // Build visual mesh
+  cv::viz::Mesh cv_mesh;
+  cv_mesh.cloud = vertices_mesh.t();
+  cv_mesh.polygons = polygons_mesh;
+  cv_mesh.colors = colors_mesh;
+
+  // Build widget mesh
+  cv::viz::WMesh widget_cv_mesh(cv_mesh);
+  widget_cv_mesh.setRenderingProperty(cv::viz::SHADING, cv::viz::SHADING_FLAT);
+  widget_cv_mesh.setRenderingProperty(cv::viz::AMBIENT, 0);
+  widget_cv_mesh.setRenderingProperty(cv::viz::LIGHTING, 1);
+  widget_cv_mesh.setRenderingProperty(cv::viz::OPACITY, opacity);
+  if (display_as_wireframe) {
+    widget_cv_mesh.setRenderingProperty(cv::viz::REPRESENTATION,
+                                        cv::viz::REPRESENTATION_WIREFRAME);
+  }
+  meshWindow_.showWidget(id.c_str(), widget_cv_mesh);
+}
+
+void OpenCvVisualizer3D::meshSpinDisplay() {
+  // Display 3D window
+  meshWindow_.spin();
+}
+
 void OpenCvVisualizer3D::getColorById(const size_t& id,
                                       cv::viz::Color* color) const {
   CHECK_NOTNULL(color);

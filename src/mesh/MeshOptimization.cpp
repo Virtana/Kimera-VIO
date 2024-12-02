@@ -87,41 +87,6 @@ void MeshOptimization::draw2dMeshOnImg(const Mesh2D& mesh_2d,
   }
 }
 
-void MeshOptimization::draw3dMesh(const std::string& id,
-                                  const Mesh3D& mesh_3d,
-                                  bool display_as_wireframe,
-                                  const double& opacity) {
-  cv::Mat vertices_mesh;
-  cv::Mat polygons_mesh;
-  mesh_3d.getVerticesMeshToMat(&vertices_mesh);
-  mesh_3d.getPolygonsMeshToMat(&polygons_mesh);
-  cv::Mat colors_mesh = mesh_3d.getColorsMesh().t();  // Note the transpose.
-  if (colors_mesh.empty()) {
-    colors_mesh = cv::Mat(1u,
-                          mesh_3d.getNumberOfUniqueVertices(),
-                          CV_8UC3,
-                          cv::viz::Color::yellow());
-  }
-
-  // Build visual mesh
-  cv::viz::Mesh cv_mesh;
-  cv_mesh.cloud = vertices_mesh.t();
-  cv_mesh.polygons = polygons_mesh;
-  cv_mesh.colors = colors_mesh;
-
-  // Build widget mesh
-  cv::viz::WMesh widget_cv_mesh(cv_mesh);
-  widget_cv_mesh.setRenderingProperty(cv::viz::SHADING, cv::viz::SHADING_FLAT);
-  widget_cv_mesh.setRenderingProperty(cv::viz::AMBIENT, 0);
-  widget_cv_mesh.setRenderingProperty(cv::viz::LIGHTING, 1);
-  widget_cv_mesh.setRenderingProperty(cv::viz::OPACITY, opacity);
-  if (display_as_wireframe) {
-    widget_cv_mesh.setRenderingProperty(cv::viz::REPRESENTATION,
-                                        cv::viz::REPRESENTATION_WIREFRAME);
-  }
-  window_.showWidget(id.c_str(), widget_cv_mesh);
-}
-
 void MeshOptimization::collectTriangleDataPointsFast(
     const cv::Mat& noisy_point_cloud,
     const Mesh2D& mesh_2d,
@@ -763,11 +728,6 @@ void MeshOptimization::drawPixelOnImg(const cv::Point2f& pixel,
                                       const size_t& pixel_size) {
   // Draw the pixel on the image
   cv::circle(img, pixel, pixel_size, color, -1);
-}
-
-void MeshOptimization::spinDisplay() {
-  // Display 3D window
-  window_.spin();
 }
 
 }  // namespace VIO
