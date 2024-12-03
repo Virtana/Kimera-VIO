@@ -25,6 +25,7 @@
 #include "kimera-vio/frontend/optical-flow/OpticalFlowPredictorFactory.h"
 #include "kimera-vio/utils/Timer.h"
 #include "kimera-vio/utils/UtilsOpenCV.h"
+#include <gflags/gflags.h> 
 
 DEFINE_bool(visualize_feature_predictions,
             false,
