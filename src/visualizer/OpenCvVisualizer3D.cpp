@@ -88,7 +88,10 @@ namespace VIO {
 
 OpenCvVisualizer3D::OpenCvVisualizer3D(const VisualizationType& viz_type,
                                        const BackendType& backend_type)
-    : Visualizer3D(viz_type), backend_type_(backend_type), logger_(nullptr) {
+    : Visualizer3D(viz_type), backend_type_(backend_type), logger_(nullptr),
+      meshWindow_("Mesh Optimization") {
+  meshWindow_.setBackgroundColor(cv::viz::Color::white());
+  meshWindow_.setFullScreen(true);
   if (FLAGS_log_mesh) {
     logger_ = std::make_unique<VisualizerLogger>();
   }

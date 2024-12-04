@@ -53,12 +53,9 @@ MeshOptimization::MeshOptimization(const MeshOptimizerType& solver_type,
     : mesh_optimizer_type_(solver_type),
       mono_camera_(camera),
       body_pose_cam_(camera->getBodyPoseCam()),
-      window_("Mesh Optimization"),
       mesh_color_type_(mesh_color_type),
       visualizer_(visualizer) {
-  CHECK(camera);
-  window_.setBackgroundColor(cv::viz::Color::white());
-  window_.setFullScreen(true);
+  CHECK(camera);  
 }
 
 MeshOptimizationOutput::UniquePtr MeshOptimization::spinOnce(
@@ -642,11 +639,11 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
   // Display reconstructed mesh.
   if (visualizer_) {
     LOG(INFO) << "Drawing optimized reconstructed mesh...";
-    draw3dMesh("Reconstructed Mesh " + std::to_string(mesh_count_),
+    visualizer_->draw3dMesh("Reconstructed Mesh " + std::to_string(mesh_count_),
                reconstructed_mesh,
                false,
                0.9);
-    spinDisplay();
+    visualizer_->meshSpinDisplay();
   }
   MeshOptimizationOutput::UniquePtr mesh_output =
       std::make_unique<MeshOptimizationOutput>();
