@@ -31,6 +31,7 @@
 #include "kimera-vio/mesh/MeshOptimization-definitions.h"
 #include "kimera-vio/mesh/MeshUtils.h"
 #include "kimera-vio/mesh/Mesher-definitions.h"
+#include "kimera-vio/utils/ColorUtils.h"
 #include "kimera-vio/utils/Macros.h"
 #include "kimera-vio/utils/UtilsOpenCV.h"
 #include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
@@ -65,7 +66,7 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::spinOnce(
 
 void MeshOptimization::draw2dMeshOnImg(const Mesh2D& mesh_2d,
                                        cv::Mat* img,
-                                       const cv::viz::Color& color,
+                                       const cv::Scalar& color,
                                        const size_t& thickness,
                                        const int line_type) {
   CHECK_NOTNULL(img);
@@ -211,7 +212,7 @@ void MeshOptimization::collectTriangleDataPoints(
         CHECK_NEAR(left_pixel.y, static_cast<double>(v), 0.001);
 
         if (visualizer_) {
-          // drawPixelOnImg(left_pixel, img_, cv::viz::Color::green(), 1u);
+          // drawPixelOnImg(left_pixel, img_, Color::Green(), 1u);
         }
 
         // 2. Generate correspondences btw points and triangles.
@@ -258,7 +259,7 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
   if (visualizer_) {
     // Flatten and get colors for pcl
     cv::Mat viz_cloud(0, 1, CV_32FC3, cv::Scalar(0));
-    cv::Mat colors_pcl = cv::Mat(0, 0, CV_8UC3, cv::viz::Color::red());
+    cv::Mat colors_pcl = cv::Mat(0, 0, CV_8UC3, Color::Red());
     CHECK_EQ(img_.type(), CV_8UC1);
     if (noisy_pcl.rows != 1u || noisy_pcl.cols != 1u) {
       LOG(ERROR) << "Reshaping noisy_pcl!";
@@ -574,25 +575,25 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
           //! Add new vertex to polygon
           //! Color with covariance bgr:
           static constexpr double kScaleStdDeviation = 0.1;
-          cv::viz::Color vtx_color = cv::viz::Color::black();
+          cv::Scalar vtx_color = Color::Black();
           switch (mesh_color_type_) {
             case MeshColorType::kVertexFlatColor: {
               // Use color of each pixel where the landmark is
               switch (mesh_count_ % 5) {
                 case 0:
-                  vtx_color = cv::viz::Color::red();
+                  vtx_color = Color::Red();
                   break;
                 case 1:
-                  vtx_color = cv::viz::Color::apricot();
+                  vtx_color = Color::Apricot();
                   break;
                 case 2:
-                  vtx_color = cv::viz::Color::purple();
+                  vtx_color = Color::Purple();
                   break;
                 case 3:
-                  vtx_color = cv::viz::Color::brown();
+                  vtx_color = Color::Brown();
                   break;
                 case 4:
-                  vtx_color = cv::viz::Color::pink();
+                  vtx_color = Color::Pink();
                   break;
               }
             } break;
@@ -721,7 +722,7 @@ bool MeshOptimization::pointInTriangle(const cv::Point2f& pt,
 
 void MeshOptimization::drawPixelOnImg(const cv::Point2f& pixel,
                                       const cv::Mat& img,
-                                      const cv::viz::Color& color,
+                                      const cv::Scalar& color,
                                       const size_t& pixel_size) {
   // Draw the pixel on the image
   cv::circle(img, pixel, pixel_size, color, -1);

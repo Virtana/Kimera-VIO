@@ -61,7 +61,7 @@ class TestTracker : public ::testing::Test {
 
     if (FLAGS_display) {
       window_ = std::make_unique<cv::viz::Viz3d>("Test Tracker");
-      window_->setBackgroundColor(cv::viz::Color::black());
+      window_->setBackgroundColor(Color::Black());
     }
   }
 
@@ -559,7 +559,7 @@ class TestTracker : public ::testing::Test {
   /** Visualization **/
   void drawPixelOnImg(const cv::Point2f& pixel,
                       cv::Mat& img,
-                      const cv::viz::Color& color = cv::viz::Color::red(),
+                      const cv::Scalar& color = Color::Red(),
                       const size_t& pixel_size = 5u,
                       const uint8_t& alpha = 255u) {
     // Draw the pixel on the image
@@ -570,7 +570,7 @@ class TestTracker : public ::testing::Test {
 
   void drawPixelsOnImg(const std::vector<cv::Point2f>& pixels,
                        cv::Mat& img,
-                       const cv::viz::Color& color = cv::viz::Color::red(),
+                       const cv::Scalar& color = Color::Red(),
                        const size_t& pixel_size = 5u,
                        const uint8_t& alpha = 255u) {
     // Draw the pixel on the image
@@ -583,7 +583,7 @@ class TestTracker : public ::testing::Test {
                     const std::string& id,
                     const cv::Point3f& cam_world_origin,
                     const double& text_thickness = 0.2,
-                    const cv::viz::Color& color = cv::viz::Color::blue(),
+                    const cv::Scalar& color = Color::Blue(),
                     const bool& display_text = false) {
     CHECK(window_);
     // Display 3D rays from cam origin to lmks.
@@ -598,7 +598,7 @@ class TestTracker : public ::testing::Test {
 
   void visualizePointCloud(const std::string& id, const cv::Mat& pointcloud) {
     CHECK(window_);
-    cv::viz::WCloud cloud(pointcloud, cv::viz::Color::red());
+    cv::viz::WCloud cloud(pointcloud, Color::Red());
     cloud.setRenderingProperty(cv::viz::POINT_SIZE, 6);
     window_->showWidget(id, cloud);
   }
@@ -641,7 +641,7 @@ class TestTracker : public ::testing::Test {
                      "lmk-cam2" + std::to_string(i),
                      cam_2_position,
                      0.2,
-                     cv::viz::Color::red());
+                     Color::Red());
         pointcloud.push_back(cv::Mat(lmk_cv).reshape(1).t());
       }
       pointcloud = pointcloud.reshape(3, lmks.size());
@@ -653,10 +653,10 @@ class TestTracker : public ::testing::Test {
           camera_2_params.image_size_, CV_8UC3, cv::Scalar(255u, 0u, 0u));
 
       // Color image 1 with pixel projections
-      drawPixelsOnImg(cam_1_kpts, cam_1_img, cv::viz::Color::brown(), 6u, 225u);
+      drawPixelsOnImg(cam_1_kpts, cam_1_img, Color::Brown(), 6u, 225u);
 
       // Color image 2 with pixel reprojections
-      drawPixelsOnImg(cam_2_kpts, cam_2_img, cv::viz::Color::green(), 3u, 125u);
+      drawPixelsOnImg(cam_2_kpts, cam_2_img, Color::Green(), 3u, 125u);
 
       cv::imshow("AHA1", cam_1_img);
       cv::imshow("AHA2", cam_2_img);
@@ -665,9 +665,9 @@ class TestTracker : public ::testing::Test {
       // Camera frustums
       // cv::viz::WCameraPosition cpw_1_frustum(K, cam_1_img, 2.0);
       cv::viz::WCameraPosition cpw_1_frustum(
-          K_1, cam_1_img, 1.0, cv::viz::Color::red());
+          K_1, cam_1_img, 1.0, Color::Red());
       cv::viz::WCameraPosition cpw_2_frustum(
-          K_2, cam_2_img, 1.0, cv::viz::Color::green());
+          K_2, cam_2_img, 1.0, Color::Green());
       window_->showWidget("Cam 1 Frustum", cpw_1_frustum, cam_1_cv_pose);
       window_->showWidget("Cam 2 Frustum", cpw_2_frustum, cam_2_cv_pose);
 
@@ -1759,7 +1759,7 @@ TEST_F(TestTracker, PnPTracking) {
           "bearing-cam1" + std::to_string(k++),
           UtilsOpenCV::gtsamVector3ToCvPoint3(left_cam_pose.translation()),
           0.2,
-          cv::viz::Color::red());
+          Color::Red());
     }
 
     visualizeScene(cam_params_left,
