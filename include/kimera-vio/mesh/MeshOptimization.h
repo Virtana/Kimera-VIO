@@ -66,7 +66,7 @@ class MeshOptimization {
   static void draw2dMeshOnImg(
       const Mesh2D& mesh_2d,
       cv::Mat* img,
-      const cv::Scalar& color = Color::Red(),
+      const cv::Scalar& color = ColorUtils::Red(),
       const size_t& thickness = 1u,
       const int line_type = CV_AA);
 
@@ -158,7 +158,7 @@ class MeshOptimization {
 
   void drawPixelOnImg(const cv::Point2f& pixel,
                       const cv::Mat& img,
-                      const cv::Scalar& color = Color::Red(),
+                      const cv::Scalar& color = ColorUtils::Red(),
                       const size_t& pixel_size = 5u);
 
  public:

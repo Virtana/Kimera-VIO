@@ -297,7 +297,7 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
   if (visualizer_) {
     // Flatten and get colors for pcl
     cv::Mat viz_cloud(0, 1, CV_32FC3, cv::Scalar(0));
-    cv::Mat colors_pcl = cv::Mat(0, 0, CV_8UC3, Color::Red());
+    cv::Mat colors_pcl = cv::Mat(0, 0, CV_8UC3, ColorUtils::Red());
     CHECK_EQ(img_.type(), CV_8UC1);
     if (noisy_pcl.rows != 1u || noisy_pcl.cols != 1u) {
       LOG(ERROR) << "Reshaping noisy_pcl!";
@@ -613,25 +613,25 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
           //! Add new vertex to polygon
           //! Color with covariance bgr:
           static constexpr double kScaleStdDeviation = 0.1;
-          cv::Scalar vtx_color = Color::Black();
+          cv::Scalar vtx_color = ColorUtils::Black();
           switch (mesh_color_type_) {
             case MeshColorType::kVertexFlatColor: {
               // Use color of each pixel where the landmark is
               switch (mesh_count_ % 5) {
                 case 0:
-                  vtx_color = Color::Red();
+                  vtx_color = ColorUtils::Red();
                   break;
                 case 1:
-                  vtx_color = Color::Apricot();
+                  vtx_color = ColorUtils::Apricot();
                   break;
                 case 2:
-                  vtx_color = Color::Purple();
+                  vtx_color = ColorUtils::Purple();
                   break;
                 case 3:
-                  vtx_color = Color::Brown();
+                  vtx_color = ColorUtils::Brown();
                   break;
                 case 4:
-                  vtx_color = Color::Pink();
+                  vtx_color = ColorUtils::Pink();
                   break;
               }
             } break;
@@ -659,7 +659,9 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
               LOG(FATAL) << "Unrecognized mesh color type.";
             }
           }
-          poly_3d.push_back(Mesh3D::VertexType(lmk_id, lmk, vtx_color));
+          poly_3d.push_back(Mesh3D::VertexType(lmk_id, lmk, 
+                                               ColorUtils::ScalarToVec3b(
+                                                vtx_color)));
         }
         if (add_poly) {
           reconstructed_mesh.addPolygonToMesh(poly_3d);
