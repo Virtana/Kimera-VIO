@@ -112,7 +112,7 @@ class CameraFixture : public ::testing::Test {
   /** Visualization **/
   // void drawPixelOnImg(const cv::Point2f& pixel,
   //                     cv::Mat& img,
-  //                     const cv::Scalar& color = Color::Red(),
+  //                     const cv::Scalar& color = ColorUtils::Red(),
   //                     const size_t& pixel_size = 5u,
   //                     const uint8_t& alpha = 255u) {
   //   // Draw the pixel on the image
@@ -123,7 +123,7 @@ class CameraFixture : public ::testing::Test {
 
   // void drawPixelsOnImg(const std::vector<cv::Point2f>& pixels,
   //                      cv::Mat& img,
-  //                      const cv::Scalar& color = Color::Red(),
+  //                      const cv::Scalar& color = ColorUtils::Red(),
   //                      const size_t& pixel_size = 5u,
   //                      const uint8_t& alpha = 255u) {
   //   // Draw the pixel on the image
