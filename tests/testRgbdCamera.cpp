@@ -101,7 +101,8 @@ class RgbdCameraFixture : public ::testing::Test {
     }
     CHECK(!valid_depth.empty());
     CHECK(visualizer_3d_);
-    visualizer_3d_->visualizePointCloud(valid_depth, &output->widgets_);
+    visualizer_3d_->visualizePointCloud(valid_depth, &output->widgets_, 
+                                        cv::Affine3d(), cv::Mat(), cv::Mat());
     CHECK_GT(output->widgets_.size(), 0u);
     CHECK(display_module_);
     display_module_->spinOnce(std::move(output));
@@ -112,7 +113,7 @@ class RgbdCameraFixture : public ::testing::Test {
   RgbdCamera::UniquePtr rgbd_camera_;
 
   //! For visualization only
-  OpenCvVisualizer3D::Ptr visualizer_3d_;
+  std::shared_ptr<VIO::BaseOpenCvVisualizer3D> visualizer_3d_;
   DisplayModule::UniquePtr display_module_;
   DisplayModule::InputQueue display_input_queue_;
 };

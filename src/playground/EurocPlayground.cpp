@@ -85,7 +85,7 @@ void EurocPlayground::visualizeGtData(const bool& viz_traj,
   output->visualization_type_ = VisualizationType::kPointcloud;
 
   // Draw the global frame of reference
-  visualizer_3d_->visualizeGlobalFrameOfReference(&output->widgets_);
+  visualizer_3d_->visualizeGlobalFrameOfReference(&output->widgets_, 1.0);
 
   if (viz_traj) {
     CHECK_GT(vio_params_.camera_params_.size(), 0);
@@ -226,7 +226,8 @@ void EurocPlayground::visualizeGtData(const bool& viz_traj,
 
         LOG(INFO) << "Send pcl to viz.";
         visualizer_3d_->visualizePointCloud(
-            valid_depth, &output->widgets_, left_cam_rect_pose, valid_colors);
+            valid_depth, &output->widgets_, left_cam_rect_pose, valid_colors,
+            cv::Mat());
       }
     }
   }

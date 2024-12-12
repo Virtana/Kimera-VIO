@@ -37,10 +37,11 @@
 #include "kimera-vio/utils/Macros.h"
 #include "kimera-vio/visualizer/Visualizer3D-definitions.h"
 #include "kimera-vio/visualizer/Visualizer3D.h"
+#include "kimera-vio/visualizer/abstract/BaseOpenCvVisualizer3D.h"
 
 namespace VIO {
 
-class OpenCvVisualizer3D : public Visualizer3D {
+class OpenCvVisualizer3D : public BaseOpenCvVisualizer3D, public Visualizer3D {
  public:
   KIMERA_DELETE_COPY_CONSTRUCTORS(OpenCvVisualizer3D);
   KIMERA_POINTER_TYPEDEFS(OpenCvVisualizer3D);

@@ -136,7 +136,8 @@ TEST(TestEurocPlayground, DISABLED_basicEurocPlayground) {
       output->visualization_type_ = VisualizationType::kPointcloud;
       CHECK(euroc_playground.visualizer_3d_);
       euroc_playground.visualizer_3d_->visualizeMesh3D(
-          pcl, colors, connect, &output->widgets_, cv::Mat(), cv::Mat());
+          pcl, colors, connect, &output->widgets_, cv::Mat(), cv::Mat(),
+          "Mesh");
       gtsam::Pose3 world_pose_body = it->second.world_pose_body_;
       CHECK_GT(output->widgets_.size(), 0u);
       output->widgets_.rbegin()->second->setPose(

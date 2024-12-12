@@ -50,7 +50,7 @@ constexpr float MeshOptimization::kMaxZ;
 MeshOptimization::MeshOptimization(const MeshOptimizerType& solver_type,
                                    const MeshColorType& mesh_color_type,
                                    Camera::ConstPtr camera,
-                                   OpenCvVisualizer3D::Ptr visualizer)
+    std::shared_ptr<VIO::BaseOpenCvVisualizer3D> visualizer)
     : mesh_optimizer_type_(solver_type),
       mono_camera_(camera),
       body_pose_cam_(camera->getBodyPoseCam()),
@@ -279,7 +279,8 @@ MeshOptimizationOutput::UniquePtr MeshOptimization::solveOptimalMesh(
         viz_cloud,
         &output->widgets_,
         UtilsOpenCV::gtsamPose3ToCvAffine3d(body_pose_cam_),
-        colors_pcl);
+        colors_pcl,
+        cv::Mat());
     // draw2dMeshOnImg(img_, mesh_2d);
     // spinDisplay();
   }

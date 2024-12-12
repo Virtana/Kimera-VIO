@@ -88,7 +88,7 @@ public:
   //! Params
   VioParams vio_params_;
 
-  OpenCvVisualizer3D::Ptr visualizer_3d_;
+  std::shared_ptr<VIO::BaseOpenCvVisualizer3D> visualizer_3d_;
 
   //! Stereo Camera to back/project and do stereo dense reconstruction.
   StereoCamera::ConstPtr stereo_camera_;
