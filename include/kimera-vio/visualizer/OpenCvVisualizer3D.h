@@ -92,7 +92,7 @@ class OpenCvVisualizer3D : public BaseOpenCvVisualizer3D, public Visualizer3D {
    * @param current_pose_gtsam Pose to be added
    * @param img Optional img to be displayed at the pose's frustum.
    */
-  void addPoseToTrajectory(const cv::Affine3d& pose);
+  void addPoseToTrajectory(const cv::Affine3d& pose) override;
 
   /**
    * @brief visualizeTrajectory3D
@@ -101,7 +101,7 @@ class OpenCvVisualizer3D : public BaseOpenCvVisualizer3D, public Visualizer3D {
    * @param frustum_image
    * @param widgets_map
    */
-  void visualizeTrajectory3D(WidgetsMap* widgets_map);
+  void visualizeTrajectory3D(WidgetsMap* widgets_map) override;
 
   /**
    * @brief visualizeTrajectoryWithFrustums
@@ -129,14 +129,16 @@ class OpenCvVisualizer3D : public BaseOpenCvVisualizer3D, public Visualizer3D {
       WidgetsMap* widgets_map,
       const std::string& widget_id = "Camera Pose with Frustum",
       const cv::Matx33d K =
-          cv::Matx33d(458, 0.0, 360, 0.0, 458, 240, 0.0, 0.0, 1.0));
+          cv::Matx33d(458, 0.0, 360, 0.0, 458, 240, 0.0, 0.0, 1.0))
+      override;
 
   /**
    * @brief visualizePlyMesh Visualize a PLY from filename (absolute path).
    * @param filename Absolute path to ply file
    * @param widgets output
    */
-  void visualizePlyMesh(const std::string& filename, WidgetsMap* widgets);
+  void visualizePlyMesh(const std::string& filename, WidgetsMap* widgets)
+      override;
 
   /**
    * @brief visualizePointCloud Given a cv::Mat with each col being
@@ -152,9 +154,10 @@ class OpenCvVisualizer3D : public BaseOpenCvVisualizer3D, public Visualizer3D {
                            WidgetsMap* widgets,
                            const cv::Affine3d& pose = cv::Affine3d(),
                            const cv::Mat& colors = cv::Mat(),
-                           const cv::Mat& normals = cv::Mat());
+                           const cv::Mat& normals = cv::Mat()) override;
 
-  void visualizeGlobalFrameOfReference(WidgetsMap* widgets, double scale = 1.0);
+  void visualizeGlobalFrameOfReference(WidgetsMap* widgets, double scale = 1.0)
+      override;
 
   /**
    * @brief visualizeMesh3D
@@ -177,7 +180,7 @@ class OpenCvVisualizer3D : public BaseOpenCvVisualizer3D, public Visualizer3D {
                        const cv::Mat& tcoords = cv::Mat(),
                        const cv::Mat& texture = cv::Mat(),
                        //! This has to be the same than the id in OpenCvDisplay
-                       const std::string& mesh_id = "Mesh");
+                       const std::string& mesh_id = "Mesh") override;
 
   //! Draw a line in opencv.
   void drawLine(const std::string& line_id,
@@ -199,10 +202,10 @@ class OpenCvVisualizer3D : public BaseOpenCvVisualizer3D, public Visualizer3D {
   void draw3dMesh(const std::string& id,
                   const Mesh3D& mesh_3d,
                   bool display_as_wireframe = false,
-                  const double& opacity = 1.0);
+                  const double& opacity = 1.0) override;
 
   //! Render the collected visualizations
-  void meshSpinDisplay();
+  void meshSpinDisplay() override;
 
  private:
   //! Create a 2D mesh from 2D corners in an image, coded as a Frame class

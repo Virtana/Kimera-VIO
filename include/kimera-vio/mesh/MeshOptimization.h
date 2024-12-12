@@ -177,7 +177,6 @@ class MeshOptimization {
   // TODO(Toni) this should be done by the display module...
   MeshColorType mesh_color_type_;
   std::shared_ptr<VIO::BaseOpenCvVisualizer3D> visualizer_;
-  // OpenCvVisualizer3D::Ptr visualizer_;
 };
 
 }  // namespace VIO
