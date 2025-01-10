@@ -6,6 +6,8 @@ namespace VIO {
 
   class BaseOpenCvVisualizer3D {
   public:
+    KIMERA_POINTER_TYPEDEFS(BaseOpenCvVisualizer3D);
+
     virtual void addPoseToTrajectory(const cv::Affine3d& pose) = 0;
 
     virtual void visualizeTrajectory3D(WidgetsMap* widgets_map) = 0;

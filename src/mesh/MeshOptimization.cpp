@@ -50,7 +50,7 @@ constexpr float MeshOptimization::kMaxZ;
 MeshOptimization::MeshOptimization(const MeshOptimizerType& solver_type,
                                    const MeshColorType& mesh_color_type,
                                    Camera::ConstPtr camera,
-    std::shared_ptr<VIO::BaseOpenCvVisualizer3D> visualizer)
+                                   BaseOpenCvVisualizer3D::Ptr visualizer)
     : mesh_optimizer_type_(solver_type),
       mono_camera_(camera),
       body_pose_cam_(camera->getBodyPoseCam()),

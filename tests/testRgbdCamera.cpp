@@ -113,7 +113,7 @@ class RgbdCameraFixture : public ::testing::Test {
   RgbdCamera::UniquePtr rgbd_camera_;
 
   //! For visualization only
-  std::shared_ptr<VIO::BaseOpenCvVisualizer3D> visualizer_3d_;
+  BaseOpenCvVisualizer3D::Ptr visualizer_3d_;
   DisplayModule::UniquePtr display_module_;
   DisplayModule::InputQueue display_input_queue_;
 };

@@ -51,7 +51,7 @@ class MeshOptimization {
   MeshOptimization(const MeshOptimizerType& solver_type,
                    const MeshColorType& mesh_color_type,
                    Camera::ConstPtr camera,
-      std::shared_ptr<VIO::BaseOpenCvVisualizer3D> visualizer = nullptr);
+                   BaseOpenCvVisualizer3D::Ptr visualizer = nullptr);
   virtual ~MeshOptimization() = default;
 
   /**
@@ -176,7 +176,7 @@ class MeshOptimization {
   /// 3D plotting
   // TODO(Toni) this should be done by the display module...
   MeshColorType mesh_color_type_;
-  std::shared_ptr<VIO::BaseOpenCvVisualizer3D> visualizer_;
+  VIO::BaseOpenCvVisualizer3D::Ptr visualizer_;
 };
 
 }  // namespace VIO
