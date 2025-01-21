@@ -31,7 +31,13 @@
 #include "kimera-vio/visualizer/DisplayFactory.h"
 #include "kimera-vio/visualizer/DisplayModule.h"
 #include "kimera-vio/visualizer/OpenCvDisplayParams.h"
+
+#ifdef KIMERA_BUILD_VISUALIZER
 #include "kimera-vio/visualizer/OpenCvVisualizer3D.h"
+#else
+#include "kimera-vio/visualizer/dummy_classes/DummyOpenCvVisualizer3D.h"
+#endif
+
 #include "kimera-vio/visualizer/Visualizer3D.h"
 #include "kimera-vio/visualizer/Visualizer3DFactory.h"
 
@@ -58,9 +64,12 @@ class RgbdCameraFixture : public ::testing::Test {
     // Create visualizer
     VisualizationType viz_type = VisualizationType::kPointcloud;
     BackendType backend_type = BackendType::kStereoImu;
+#ifdef KIMERA_BUILD_VISUALIZER    
     visualizer_3d_ =
         std::make_unique<OpenCvVisualizer3D>(viz_type, backend_type);
-
+#else
+    visualizer_3d_ = std::make_unique<DummyOpenCvVisualizer3D>();
+#endif
     // Create Displayer
     if (FLAGS_display) {
       CHECK(vio_params_.display_params_);

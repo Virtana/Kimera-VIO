@@ -48,7 +48,11 @@ EurocPlayground::EurocPlayground(const std::string& dataset_path,
   // Create 3D visualizer
   VisualizationType viz_type = VisualizationType::kPointcloud;
   BackendType backend_type = BackendType::kStereoImu;
+#ifdef KIMERA_BUILD_VISUALIZER
   visualizer_3d_ = std::make_unique<OpenCvVisualizer3D>(viz_type, backend_type);
+#else
+  visualizer_3d_ = std::make_unique<DummyOpenCvVisualizer3D>();
+#endif
 
   // Create Displayer
   CHECK(vio_params_.display_params_);
