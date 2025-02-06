@@ -25,6 +25,7 @@
 
 #include <optional>
 
+#include "kimera-vio/common/vio_types.h"
 #include "kimera-vio/frontend/Camera.h"
 #include "kimera-vio/frontend/CameraParams.h"
 #include "kimera-vio/frontend/Frame.h"
@@ -33,15 +34,8 @@
 #include "kimera-vio/frontend/VisionImuTrackerParams.h"
 #include "kimera-vio/frontend/optical-flow/OpticalFlowPredictor.h"
 #include "kimera-vio/utils/Macros.h"
-#include "kimera-vio/visualizer/Display-definitions.h"
 
 namespace VIO {
-
-// TODO(Toni): Fast-forwarding bcs of an issue wiht includes:
-// if you include here the display-definitions.h, a million errors appear, this
-// should go away after properly cleaning what each file includes.
-class DisplayInputBase;
-using DisplayQueue = ThreadsafeQueue<std::unique_ptr<DisplayInputBase>>;
 
 class Tracker {
  public:
@@ -55,8 +49,7 @@ class Tracker {
    * @param Camera Camera used for tracking
    */
   Tracker(const TrackerParams& tracker_params,
-          const Camera::ConstPtr& camera,
-          DisplayQueue* display_queue = nullptr);
+          const Camera::ConstPtr& camera);
 
   virtual ~Tracker() = default;
 
@@ -324,9 +317,6 @@ class Tracker {
   // Feature tracking uses the optical flow predictor to have a better guess of
   // where the features moved from frame to frame.
   OpticalFlowPredictor::UniquePtr optical_flow_predictor_;
-
-  // Display queue: push to this queue if you want to display an image.
-  DisplayQueue* display_queue_;
 
   // This is not const as for debugging we want to redirect the image save path
   // where we like.
