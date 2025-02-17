@@ -4,9 +4,12 @@
 
 namespace VIO {
 
-/* Color namespace is used instead of cv::viz::Color in non-visualizer classes
-   to facilitate building without the visualizer. Color values are taken from
+/* Color namespace is used to conveniently produce cv color values. The actual
+   Color values are taken from cv::viz:
    https://github.com/apc-llc/opencv-2.4.10/blob/master/modules/viz/include/opencv2/viz/types.hpp#L191
+
+   cv::viz is a heavy component to include as a mandatory dependency for Color
+   values only, hence the reason for this inclusion.
 */
 namespace Color {
   inline cv::Scalar Apricot() { return cv::Scalar(177, 206, 251); }

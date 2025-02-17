@@ -125,7 +125,7 @@ TEST(TestEurocPlayground, DISABLED_basicEurocPlayground) {
       // LOG(INFO) << connect;
 
       // mesh_opt.draw3dMesh(
-      //     "Mesh 3D before opt", ColorUtils::Blue(), input.mesh_3d);
+      //     "Mesh 3D before opt", Color::Blue(), input.mesh_3d);
       input.pcl = ordered_pcl;
 
       MeshOptimizationOutput::UniquePtr out_ptr = mesh_opt.spinOnce(input);
