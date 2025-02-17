@@ -78,12 +78,12 @@ class Mesh {
         : lmk_id_(-1),
           vertex_position_(),
           vertex_normal_(),
-          vertex_color_(ColorUtils::ScalarToVec3b(ColorUtils::White())) {}
+          vertex_color_(Color::ScalarToVec3b(Color::White())) {}
 
     Vertex(const LandmarkId& lmk_id,
            const VertexPosition& vertex_position,
-           const VertexColorRGB& vertex_color = 
-            ColorUtils::ScalarToVec3b(ColorUtils::White()),
+           const VertexColorRGB& vertex_color =
+            Color::ScalarToVec3b(Color::White()),
            const VertexNormal& vertex_normal = VertexNormal())
         : lmk_id_(lmk_id),
           vertex_position_(vertex_position),

@@ -90,7 +90,7 @@ TEST(TestEurocPlayground, DISABLED_basicEurocPlayground) {
         cv::circle(mesh_2d_viz,
                    keypoint,
                    1,
-                   ColorUtils::Blue(),
+                   Color::Blue(),
                    CV_FILLED,
                    CV_AA,
                    0);
