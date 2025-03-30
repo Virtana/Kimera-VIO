@@ -18,6 +18,7 @@
 #include "kimera-vio/backend/VioBackend-definitions.h"
 #include "kimera-vio/frontend/Camera.h"
 #include "kimera-vio/frontend/RgbdFrame.h"
+#include "kimera-vio/utils/ColorUtils.h"
 #include "kimera-vio/utils/Macros.h"
 
 namespace VIO {

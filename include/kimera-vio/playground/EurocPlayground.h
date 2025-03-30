@@ -28,6 +28,7 @@
 #include "kimera-vio/frontend/StereoCamera.h"
 #include "kimera-vio/frontend/StereoMatcher.h"
 #include "kimera-vio/frontend/feature-detector/FeatureDetector.h"
+#include "kimera-vio/utils/ColorUtils.h"
 #include "kimera-vio/visualizer/Display.h"
 #include "kimera-vio/visualizer/DisplayFactory.h"
 #include "kimera-vio/visualizer/DisplayModule.h"

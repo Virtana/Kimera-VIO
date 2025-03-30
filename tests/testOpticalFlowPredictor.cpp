@@ -20,6 +20,7 @@
 #include "kimera-vio/frontend/optical-flow/OpticalFlowPredictor.h"
 #include "kimera-vio/frontend/optical-flow/OpticalFlowPredictorFactory.h"
 #include "kimera-vio/pipeline/Pipeline-definitions.h"
+#include "kimera-vio/utils/ColorUtils.h"
 
 DECLARE_string(test_data_path);
 DECLARE_bool(display);
@@ -152,7 +153,7 @@ class OpticalFlowPredictorFixture : public ::testing::Test {
   /** Visualization **/
   void drawPixelOnImg(const cv::Point2f& pixel,
                       cv::Mat& img,
-                      const cv::viz::Color& color = cv::viz::Color::red(),
+                      const cv::Scalar& color = Color::Red(),
                       const size_t& pixel_size = 5u,
                       const uint8_t& alpha = 255u) {
     // Draw the pixel on the image
@@ -163,7 +164,7 @@ class OpticalFlowPredictorFixture : public ::testing::Test {
 
   void drawPixelsOnImg(const std::vector<cv::Point2f>& pixels,
                        cv::Mat& img,
-                       const cv::viz::Color& color = cv::viz::Color::red(),
+                       const cv::Scalar& color = Color::Red(),
                        const size_t& pixel_size = 5u,
                        const uint8_t& alpha = 255u) {
     // Draw the pixel on the image
@@ -176,7 +177,7 @@ class OpticalFlowPredictorFixture : public ::testing::Test {
                     const std::string& id,
                     const cv::Point3f& cam_world_origin,
                     const double& text_thickness = 0.2,
-                    const cv::viz::Color& color = cv::viz::Color::blue(),
+                    const cv::Scalar& color = Color::Blue(),
                     const bool& display_text = false) {
     CHECK(window_);
     // Display 3D rays from cam origin to lmks.
@@ -200,7 +201,7 @@ class OpticalFlowPredictorFixture : public ::testing::Test {
                       const KeypointsCV& predicted_kpts) {
     if (FLAGS_display) {
       window_ = std::make_unique<cv::viz::Viz3d>(test_name);
-      window_->setBackgroundColor(cv::viz::Color::white());
+      window_->setBackgroundColor(Color::White());
 
       cv::Matx33d K = UtilsOpenCV::gtsamMatrix3ToCvMat(simulated_calib_.K());
       cv::Mat cam_1_img = cv::Mat(camera_params_.image_size_,
@@ -236,7 +237,7 @@ class OpticalFlowPredictorFixture : public ::testing::Test {
                      "lmk-cam2" + std::to_string(i),
                      cam_2_position,
                      0.2,
-                     cv::viz::Color::red());
+                     Color::Red());
         pointcloud.push_back(cv::Mat(lmk_cv).reshape(1).t());
       }
       pointcloud = pointcloud.reshape(3, lmks_.size());
@@ -244,16 +245,16 @@ class OpticalFlowPredictorFixture : public ::testing::Test {
 
       // Color image 2 with pixel reprojections (the ground-truth)
       drawPixelsOnImg(
-          cam_2_kpts_, cam_2_img, cv::viz::Color::green(), 3u, 125u);
+          cam_2_kpts_, cam_2_img, Color::Green(), 3u, 125u);
 
       // Color image 2 with pixel prediction if no prediction is done
       // Expected result if using NoPredictionOpticalFlow
       drawPixelsOnImg(
-          cam_1_kpts_, cam_2_img, cv::viz::Color::brown(), 6u, 125u);
+          cam_1_kpts_, cam_2_img, Color::Brown(), 6u, 125u);
 
       // Show the estimated kpt positions in red and smaller
       drawPixelsOnImg(
-          predicted_kpts, cam_2_img, cv::viz::Color::red(), 1u, 125u);
+          predicted_kpts, cam_2_img, Color::Red(), 1u, 125u);
 
       // Camera frustums
       // cv::viz::WCameraPosition cpw_1_frustum(K, cam_1_img, 2.0);
